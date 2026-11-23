@@ -156,7 +156,7 @@ linux-vuln-scanner/
 The core scanning engine, inventory collector, EVR comparison, applicability engine, CLI, zero-dependency Web Dashboard, HTML reporting, JSON reporting, CSV reporting, and PDF reporting require **ZERO external pip packages**. You can run it immediately on any Linux server:
 
 ```bash
-git clone https://github.com/example/linux-vuln-scanner.git
+git clone https://github.com/hex2607/linux-vuln-scanner.git
 cd linux-vuln-scanner
 export PYTHONPATH=.
 python3 -m vulnscan.cli --help
