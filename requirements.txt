@@ -1,0 +1,9 @@
+# Core requirements:
+# Note: The core scanning engine, inventory collector, EVR comparison, applicability engine,
+# CLI, zero-dependency Web Dashboard, HTML reporting, JSON reporting, CSV reporting, and PDF reporting
+# run completely using Python Standard Library (zero mandatory external dependencies).
+
+# Optional UI enhancements:
+# streamlit>=1.28.0   # For optional Streamlit-based graphical console
+# paramiko>=2.11.0    # Optional pure-Python SSH client (falls back to OpenSSH CLI)
+# reportlab>=3.6.0    # Optional enhanced PDF layout engine

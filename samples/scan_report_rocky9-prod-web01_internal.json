@@ -1,0 +1,608 @@
+{
+  "scanner_version": "1.0.0",
+  "scan_timestamp": "2026-11-20T07:28:30.408642+00:00",
+  "is_offline_mode": true,
+  "data_source_timestamps": {
+    "Rocky Linux / RHEL Errata": "2026-11-20T00:00:00Z",
+    "Ubuntu / Debian Security Tracker": "2026-11-20T00:00:00Z",
+    "CISA KEV Catalog": "2026-11-19T18:00:00Z",
+    "FIRST EPSS": "2026-11-20T04:00:00Z",
+    "Local Advisory Cache": "2026-11-20T07:28:30.408691+00:00"
+  },
+  "system_info": {
+    "hostname": "rocky9-prod-web01.internal",
+    "os_name": "Rocky Linux",
+    "os_version": "9.6",
+    "os_family": "rhel",
+    "os_codename": "Blue Onyx",
+    "platform_id": "platform:el9",
+    "kernel_version": "5.14.0-503.14.1.el9_6.x86_64",
+    "architecture": "x86_64",
+    "package_manager": "rpm",
+    "uptime_seconds": 345600.0,
+    "virtualization": "kvm",
+    "cloud_provider": "AWS EC2",
+    "cpu": {
+      "vendor_id": "GenuineIntel",
+      "model_name": "Intel(R) Xeon(R) Platinum 8375C CPU @ 2.80GHz",
+      "architecture": "x86_64",
+      "cpu_count": 4,
+      "flags": [
+        "fpu",
+        "vme",
+        "de",
+        "pse",
+        "tsc",
+        "msr",
+        "pae",
+        "mce",
+        "cx8",
+        "apic",
+        "sep",
+        "mtrr",
+        "pge",
+        "mca",
+        "cmov",
+        "pat",
+        "pse36",
+        "clflush",
+        "mmx",
+        "fxsr",
+        "sse",
+        "sse2",
+        "ss",
+        "ht",
+        "syscall",
+        "nx",
+        "pdpe1gb",
+        "rdtscp",
+        "lm",
+        "constant_tsc",
+        "avx",
+        "avx2",
+        "avx512f",
+        "avx512dq",
+        "avx512cd",
+        "avx512bw",
+        "avx512vl",
+        "avx512_vnni",
+        "avx512_vbmi",
+        "aes"
+      ],
+      "has_avx512": true,
+      "has_avx512_vbmi": true,
+      "has_aes_ni": true
+    },
+    "memory_total_mb": 15920,
+    "scan_timestamp": "2026-11-20T07:28:30.408418+00:00"
+  },
+  "summary": {
+    "total_cves_evaluated": 5,
+    "affected_count": 4,
+    "potentially_affected_count": 0,
+    "not_affected_count": 0,
+    "mitigated_count": 0,
+    "fixed_count": 1,
+    "unable_to_determine_count": 0,
+    "critical_count": 0,
+    "high_count": 4,
+    "medium_count": 0,
+    "low_count": 0,
+    "cisa_kev_count": 1,
+    "duration_seconds": 0.0
+  },
+  "findings": [
+    {
+      "cve_id": "CVE-2023-44487",
+      "title": "HTTP/2 Rapid Reset Denial of Service (DDoS)",
+      "component": "nginx",
+      "installed_version": "nginx-1:1.20.1-14.el9_2.1.x86_64",
+      "fixed_version": "1:1.20.1-14.el9_2.3",
+      "status": "Affected",
+      "severity": "HIGH",
+      "cvss_score": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "epss_score": 0.8842,
+      "cisa_kev": true,
+      "risk_priority_score": 81.2,
+      "priority_rank": 1,
+      "advisory_source": "Rocky Linux",
+      "advisory_id": "RHSA-2023:5468",
+      "evidence": [
+        {
+          "command": "rpm -q nginx-1:1.20.1-14.el9_2.1.x86_64",
+          "output_snippet": "Installed: nginx-1:1.20.1-14.el9_2.1.x86_64 | Vendor Fixed: 1:1.20.1-14.el9_2.3",
+          "source_file_or_target": "/var/lib/rpm",
+          "interpretation": "RPM EVR comparison: 1:1.20.1-14.el9_2.1 vs 1:1.20.1-14.el9_2.3 -> Installed is less (potentially vulnerable).",
+          "timestamp": "2026-11-20T07:28:30.409138+00:00"
+        },
+        {
+          "command": "systemctl status nginx",
+          "output_snippet": "Active: active (running)",
+          "source_file_or_target": "systemd",
+          "interpretation": "Service 'nginx' is actively executing and listening for network connections.",
+          "timestamp": "2026-11-20T07:28:30.409141+00:00"
+        },
+        {
+          "command": "nginx -T | grep http2",
+          "output_snippet": "listen 443 ssl http2;",
+          "source_file_or_target": "/etc/nginx/nginx.conf",
+          "interpretation": "Configuration condition met: 'http2' is set to 'enabled', enabling vulnerable attack surface.",
+          "timestamp": "2026-11-20T07:28:30.409144+00:00"
+        }
+      ],
+      "applicability_reason": "Confirmed vulnerable package installed (nginx-1:1.20.1-14.el9_2.1.x86_64) and all prerequisites met (Service 'nginx' is running, Configuration directive 'http2' is enabled).",
+      "prerequisites_met": [
+        "Service 'nginx' is running",
+        "Configuration directive 'http2' is enabled"
+      ],
+      "prerequisites_not_met": [],
+      "remediation": "sudo dnf update nginx",
+      "remediation_cmd": "sudo dnf update nginx",
+      "mitigation": "Remove http2 parameter from listen directives.",
+      "verification_cmd": "rpm -q --changelog nginx | grep -i 'CVE-2023-44487' || dnf updateinfo info --cve CVE-2023-44487",
+      "requires_reboot": false,
+      "requires_service_restart": true,
+      "affected_service_name": "nginx",
+      "confidence": "High",
+      "references": [
+        "https://access.redhat.com/security/cve/CVE-2023-44487"
+      ]
+    },
+    {
+      "cve_id": "CVE-2026-123633",
+      "title": "NGINX HTTP/2 Rapid Stream Cancellation High CPU Resource Exhaustion",
+      "component": "nginx",
+      "installed_version": "nginx-1:1.20.1-14.el9_2.1.x86_64",
+      "fixed_version": "1:1.20.1-14.el9_2.3",
+      "status": "Affected",
+      "severity": "HIGH",
+      "cvss_score": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "epss_score": 0.7289,
+      "cisa_kev": false,
+      "risk_priority_score": 61.2,
+      "priority_rank": 2,
+      "advisory_source": "Rocky Linux",
+      "advisory_id": "RLSA-2026:1236",
+      "evidence": [
+        {
+          "command": "rpm -q nginx-1:1.20.1-14.el9_2.1.x86_64",
+          "output_snippet": "Installed: nginx-1:1.20.1-14.el9_2.1.x86_64 | Vendor Fixed: 1:1.20.1-14.el9_2.3",
+          "source_file_or_target": "/var/lib/rpm",
+          "interpretation": "RPM EVR comparison: 1:1.20.1-14.el9_2.1 vs 1:1.20.1-14.el9_2.3 -> Installed is less (potentially vulnerable).",
+          "timestamp": "2026-11-20T07:28:30.409089+00:00"
+        },
+        {
+          "command": "systemctl status nginx",
+          "output_snippet": "Active: active (running)",
+          "source_file_or_target": "systemd",
+          "interpretation": "Service 'nginx' is actively executing and listening for network connections.",
+          "timestamp": "2026-11-20T07:28:30.409095+00:00"
+        },
+        {
+          "command": "nginx -T | grep http2",
+          "output_snippet": "listen 443 ssl http2;",
+          "source_file_or_target": "/etc/nginx/nginx.conf",
+          "interpretation": "Configuration condition met: 'http2' is set to 'enabled', enabling vulnerable attack surface.",
+          "timestamp": "2026-11-20T07:28:30.409099+00:00"
+        }
+      ],
+      "applicability_reason": "Confirmed vulnerable package installed (nginx-1:1.20.1-14.el9_2.1.x86_64) and all prerequisites met (Service 'nginx' is running, Configuration directive 'http2' is enabled).",
+      "prerequisites_met": [
+        "Service 'nginx' is running",
+        "Configuration directive 'http2' is enabled"
+      ],
+      "prerequisites_not_met": [],
+      "remediation": "Apply updated Rocky Linux package: sudo dnf update nginx",
+      "remediation_cmd": "sudo dnf update nginx",
+      "mitigation": "Disable HTTP/2 on listening ports by removing 'http2' parameter from listen directives in /etc/nginx/nginx.conf.",
+      "verification_cmd": "rpm -q --changelog nginx | grep -i 'CVE-2026-123633' || dnf updateinfo info --cve CVE-2026-123633",
+      "requires_reboot": false,
+      "requires_service_restart": true,
+      "affected_service_name": "nginx",
+      "confidence": "High",
+      "references": [
+        "https://errata.rockylinux.org/RLSA-2026:1236",
+        "https://access.redhat.com/security/cve/CVE-2026-123633",
+        "https://nginx.org/en/security_advisories.html"
+      ]
+    },
+    {
+      "cve_id": "CVE-2026-123007",
+      "title": "NGINX HTTP/2 HPACK Dynamic Table State Synchronization Deserialization Flaw",
+      "component": "nginx",
+      "installed_version": "nginx-1:1.20.1-14.el9_2.1.x86_64",
+      "fixed_version": "1:1.20.1-14.el9_2.3",
+      "status": "Affected",
+      "severity": "HIGH",
+      "cvss_score": 8.2,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H",
+      "epss_score": 0.3812,
+      "cisa_kev": false,
+      "risk_priority_score": 52.0,
+      "priority_rank": 3,
+      "advisory_source": "Rocky Linux",
+      "advisory_id": "RLSA-2026:1230",
+      "evidence": [
+        {
+          "command": "rpm -q nginx-1:1.20.1-14.el9_2.1.x86_64",
+          "output_snippet": "Installed: nginx-1:1.20.1-14.el9_2.1.x86_64 | Vendor Fixed: 1:1.20.1-14.el9_2.3",
+          "source_file_or_target": "/var/lib/rpm",
+          "interpretation": "RPM EVR comparison: 1:1.20.1-14.el9_2.1 vs 1:1.20.1-14.el9_2.3 -> Installed is less (potentially vulnerable).",
+          "timestamp": "2026-11-20T07:28:30.409118+00:00"
+        },
+        {
+          "command": "systemctl status nginx",
+          "output_snippet": "Active: active (running)",
+          "source_file_or_target": "systemd",
+          "interpretation": "Service 'nginx' is actively executing and listening for network connections.",
+          "timestamp": "2026-11-20T07:28:30.409122+00:00"
+        },
+        {
+          "command": "nginx -T | grep http2",
+          "output_snippet": "listen 443 ssl http2;",
+          "source_file_or_target": "/etc/nginx/nginx.conf",
+          "interpretation": "Configuration condition met: 'http2' is set to 'enabled', enabling vulnerable attack surface.",
+          "timestamp": "2026-11-20T07:28:30.409125+00:00"
+        }
+      ],
+      "applicability_reason": "Confirmed vulnerable package installed (nginx-1:1.20.1-14.el9_2.1.x86_64) and all prerequisites met (Service 'nginx' is running, Configuration directive 'http2' is enabled).",
+      "prerequisites_met": [
+        "Service 'nginx' is running",
+        "Configuration directive 'http2' is enabled"
+      ],
+      "prerequisites_not_met": [],
+      "remediation": "Update nginx package to fixed vendor release 1:1.20.1-14.el9_2.3 via dnf.",
+      "remediation_cmd": "sudo dnf update nginx",
+      "mitigation": "Disable HTTP/2 protocol support in server configurations.",
+      "verification_cmd": "rpm -q --changelog nginx | grep -i 'CVE-2026-123007' || dnf updateinfo info --cve CVE-2026-123007",
+      "requires_reboot": false,
+      "requires_service_restart": true,
+      "affected_service_name": "nginx",
+      "confidence": "High",
+      "references": [
+        "https://errata.rockylinux.org/RLSA-2026:1230",
+        "https://access.redhat.com/security/cve/CVE-2026-123007"
+      ]
+    },
+    {
+      "cve_id": "CVE-2026-114938",
+      "title": "OpenJDK AVX-512 VBMI Base64 Decoding Out-of-Bounds Memory Corruption",
+      "component": "java-17-openjdk",
+      "installed_version": "java-17-openjdk-1:17.0.8-7.el9.x86_64",
+      "fixed_version": "1:17.0.9-1.el9",
+      "status": "Affected",
+      "severity": "HIGH",
+      "cvss_score": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:H",
+      "epss_score": 0.1425,
+      "cisa_kev": false,
+      "risk_priority_score": 41.2,
+      "priority_rank": 4,
+      "advisory_source": "Rocky Linux",
+      "advisory_id": "RLSA-2026:1149",
+      "evidence": [
+        {
+          "command": "rpm -q java-17-openjdk-1:17.0.8-7.el9.x86_64",
+          "output_snippet": "Installed: java-17-openjdk-1:17.0.8-7.el9.x86_64 | Vendor Fixed: 1:17.0.9-1.el9",
+          "source_file_or_target": "/var/lib/rpm",
+          "interpretation": "RPM EVR comparison: 1:17.0.8-7.el9 vs 1:17.0.9-1.el9 -> Installed is less (potentially vulnerable).",
+          "timestamp": "2026-11-20T07:28:30.409051+00:00"
+        },
+        {
+          "command": "grep flags /proc/cpuinfo",
+          "output_snippet": "flags: ... avx512_vbmi ...",
+          "source_file_or_target": "/proc/cpuinfo",
+          "interpretation": "Host CPU supports required hardware extension 'avx512_vbmi' for vulnerability exploit path.",
+          "timestamp": "2026-11-20T07:28:30.409058+00:00"
+        },
+        {
+          "command": "ps -eo pid,args | grep java",
+          "output_snippet": "No disabling flag found in JVM arguments",
+          "source_file_or_target": "running JVM cmdline",
+          "interpretation": "Vulnerable intrinsic is active in JVM runtime.",
+          "timestamp": "2026-11-20T07:28:30.409062+00:00"
+        }
+      ],
+      "applicability_reason": "Confirmed vulnerable package installed (java-17-openjdk-1:17.0.8-7.el9.x86_64) and all prerequisites met (CPU instruction flag 'avx512_vbmi' present, JVM Base64 intrinsic enabled (default)).",
+      "prerequisites_met": [
+        "CPU instruction flag 'avx512_vbmi' present",
+        "JVM Base64 intrinsic enabled (default)"
+      ],
+      "prerequisites_not_met": [],
+      "remediation": "Upgrade java-17-openjdk to version 1:17.0.9-1.el9 or later using dnf.",
+      "remediation_cmd": "sudo dnf update java-17-openjdk",
+      "mitigation": "Disable the vulnerable JVM Base64 intrinsic by passing '-XX:-UseBase64Intrinsics' or disable AVX-512 via '-XX:UseAVX=2' in JAVA_OPTS.",
+      "verification_cmd": "rpm -q --changelog java-17-openjdk | grep -i 'CVE-2026-114938' || dnf updateinfo info --cve CVE-2026-114938",
+      "requires_reboot": false,
+      "requires_service_restart": true,
+      "affected_service_name": null,
+      "confidence": "High",
+      "references": [
+        "https://errata.rockylinux.org/RLSA-2026:1149",
+        "https://access.redhat.com/security/cve/CVE-2026-114938",
+        "https://bugs.openjdk.org/browse/JDK-8321456"
+      ]
+    },
+    {
+      "cve_id": "CVE-2021-3156",
+      "title": "Sudo Baron Samedit Local Privilege Escalation",
+      "component": "sudo",
+      "installed_version": "sudo-1.9.5p2-14.el9.x86_64",
+      "fixed_version": "1.9.5p2-14.el9",
+      "status": "Fixed",
+      "severity": "HIGH",
+      "cvss_score": 7.8,
+      "cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "epss_score": 0.9421,
+      "cisa_kev": true,
+      "risk_priority_score": 3.6,
+      "priority_rank": 5,
+      "advisory_source": "Rocky Linux",
+      "advisory_id": "RHSA-2021:0218",
+      "evidence": [
+        {
+          "command": "rpm -q sudo-1.9.5p2-14.el9.x86_64",
+          "output_snippet": "Installed: sudo-1.9.5p2-14.el9.x86_64 | Vendor Fixed: 1.9.5p2-14.el9",
+          "source_file_or_target": "/var/lib/rpm",
+          "interpretation": "RPM EVR comparison: 0:1.9.5p2-14.el9 vs 0:1.9.5p2-14.el9 -> Installed is greater/equal.",
+          "timestamp": "2026-11-20T07:28:30.409153+00:00"
+        }
+      ],
+      "applicability_reason": "Installed package version (1.9.5p2-14.el9) meets or exceeds vendor fixed release (1.9.5p2-14.el9).",
+      "prerequisites_met": [],
+      "prerequisites_not_met": [],
+      "remediation": "Package is up-to-date with vendor security fix. Maintain regular patching schedule.",
+      "remediation_cmd": null,
+      "mitigation": null,
+      "verification_cmd": null,
+      "requires_reboot": false,
+      "requires_service_restart": false,
+      "affected_service_name": null,
+      "confidence": "High",
+      "references": [
+        "https://access.redhat.com/security/cve/CVE-2021-3156"
+      ]
+    }
+  ],
+  "packages_count": 12,
+  "packages": [
+    {
+      "name": "kernel",
+      "version": "5.14.0",
+      "release": "503.14.1.el9_6",
+      "epoch": "0",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "kernel-5.14.0-503.14.1.el9_6.x86_64"
+    },
+    {
+      "name": "systemd",
+      "version": "252",
+      "release": "46.el9_6",
+      "epoch": "0",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "systemd-252-46.el9_6.x86_64"
+    },
+    {
+      "name": "openssl",
+      "version": "3.2.2",
+      "release": "6.el9_6",
+      "epoch": "1",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "openssl-1:3.2.2-6.el9_6.x86_64"
+    },
+    {
+      "name": "openssl-libs",
+      "version": "3.2.2",
+      "release": "6.el9_6",
+      "epoch": "1",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "openssl-libs-1:3.2.2-6.el9_6.x86_64"
+    },
+    {
+      "name": "nginx",
+      "version": "1.20.1",
+      "release": "14.el9_2.1",
+      "epoch": "1",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "nginx-1:1.20.1-14.el9_2.1.x86_64"
+    },
+    {
+      "name": "nginx-core",
+      "version": "1.20.1",
+      "release": "14.el9_2.1",
+      "epoch": "1",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "nginx-core-1:1.20.1-14.el9_2.1.x86_64"
+    },
+    {
+      "name": "java-17-openjdk",
+      "version": "17.0.8",
+      "release": "7.el9",
+      "epoch": "1",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "java-17-openjdk-1:17.0.8-7.el9.x86_64"
+    },
+    {
+      "name": "java-17-openjdk-headless",
+      "version": "17.0.8",
+      "release": "7.el9",
+      "epoch": "1",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "java-17-openjdk-headless-1:17.0.8-7.el9.x86_64"
+    },
+    {
+      "name": "glibc",
+      "version": "2.34",
+      "release": "125.el9_6",
+      "epoch": "0",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "glibc-2.34-125.el9_6.x86_64"
+    },
+    {
+      "name": "curl",
+      "version": "7.76.1",
+      "release": "31.el9_6",
+      "epoch": "0",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "curl-7.76.1-31.el9_6.x86_64"
+    },
+    {
+      "name": "sudo",
+      "version": "1.9.5p2",
+      "release": "14.el9",
+      "epoch": "0",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "sudo-1.9.5p2-14.el9.x86_64"
+    },
+    {
+      "name": "python3",
+      "version": "3.9.21",
+      "release": "1.el9_6",
+      "epoch": "0",
+      "arch": "x86_64",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "source_rpm": null,
+      "status": null,
+      "full_nevra": "python3-3.9.21-1.el9_6.x86_64"
+    }
+  ],
+  "runtimes": [
+    {
+      "name": "nginx",
+      "detected_version": "1.20.1",
+      "binary_path": "/usr/sbin/nginx",
+      "install_type": "system",
+      "associated_package": null,
+      "runtime_flags": [],
+      "metadata": {
+        "has_http_v2_module": true
+      }
+    },
+    {
+      "name": "openjdk",
+      "detected_version": "17.0.8+7.el9",
+      "binary_path": "/usr/lib/jvm/java-17-openjdk/bin/java",
+      "install_type": "system",
+      "associated_package": null,
+      "runtime_flags": [],
+      "metadata": {}
+    },
+    {
+      "name": "openssl",
+      "detected_version": "3.2.2",
+      "binary_path": "/usr/bin/openssl",
+      "install_type": "system",
+      "associated_package": null,
+      "runtime_flags": [],
+      "metadata": {}
+    },
+    {
+      "name": "python3",
+      "detected_version": "3.9.21",
+      "binary_path": "/usr/bin/python3",
+      "install_type": "system",
+      "associated_package": null,
+      "runtime_flags": [],
+      "metadata": {}
+    }
+  ],
+  "services": [
+    {
+      "name": "nginx",
+      "load_state": "loaded",
+      "active_state": "active",
+      "sub_state": "running",
+      "unit_file_state": "unknown",
+      "exec_path": "/usr/sbin/nginx",
+      "pid": 1120,
+      "listening_ports": [
+        80,
+        443
+      ],
+      "is_running": true
+    },
+    {
+      "name": "sshd",
+      "load_state": "loaded",
+      "active_state": "active",
+      "sub_state": "running",
+      "unit_file_state": "unknown",
+      "exec_path": "/usr/sbin/sshd",
+      "pid": 840,
+      "listening_ports": [
+        22
+      ],
+      "is_running": true
+    },
+    {
+      "name": "systemd-journald",
+      "load_state": "loaded",
+      "active_state": "active",
+      "sub_state": "running",
+      "unit_file_state": "unknown",
+      "exec_path": "/usr/lib/systemd/systemd-journald",
+      "pid": 560,
+      "listening_ports": [],
+      "is_running": true
+    }
+  ],
+  "configurations": [
+    {
+      "service_name": "nginx",
+      "config_file": "/etc/nginx/nginx.conf",
+      "directive": "http2",
+      "value": "enabled",
+      "security_relevance": "HTTP/2 listener configuration on port 443 ssl",
+      "raw_snippet": "listen 443 ssl http2;"
+    },
+    {
+      "service_name": "java",
+      "config_file": "jvm_arguments",
+      "directive": "-XX:-UseBase64Intrinsics",
+      "value": "default_enabled",
+      "security_relevance": "JVM Base64 AVX-512 intrinsic status",
+      "raw_snippet": "default intrinsic settings"
+    }
+  ],
+  "limitations": [
+    "Assessment is based on authoritative local and vendor advisories available at scan time.",
+    "Ephemeral or containerized processes spawned after the inventory collection window are not reflected.",
+    "Non-standard binaries without version banners or metadata may require manual binary signature analysis.",
+    "Scan ran in Offline Mode; live API lookups for newly published 0-day advisories were skipped."
+  ]
+}

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Assessment Report - rocky9-prod-web01.internal</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --primary: #3b82f6;
+            --critical: #ef4444;
+            --high: #f97316;
+            --medium: #f59e0b;
+            --low: #3b82f6;
+            --affected: #ef4444;
+            --potential: #f59e0b;
+            --mitigated: #a855f7;
+            --fixed: #10b981;
+            --not-affected: #64748b;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            padding: 24px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        h1 { font-size: 24px; font-weight: 700; color: #fff; }
+        h2 { font-size: 18px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h4 { font-size: 14px; text-transform: uppercase; color: var(--text-muted); margin: 16px 0 8px 0; }
+        .header-meta { color: var(--text-muted); font-size: 14px; }
+        
+        .grid-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background: var(--surface);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .card-num { font-size: 32px; font-weight: 800; }
+        .card-label { font-size: 13px; text-transform: uppercase; color: var(--text-muted); }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-sev-critical { background: #7f1d1d; color: #fecaca; }
+        .badge-sev-high { background: #7c2d12; color: #fed7aa; }
+        .badge-sev-medium { background: #78350f; color: #fef08a; }
+        .badge-sev-low { background: #1e3a8a; color: #bfdbfe; }
+        
+        .badge-status-affected { background: #7f1d1d; color: #fecaca; border: 1px solid #ef4444; }
+        .badge-status-potentially-affected { background: #78350f; color: #fef08a; border: 1px solid #f59e0b; }
+        .badge-status-mitigated { background: #581c87; color: #e9d5ff; border: 1px solid #a855f7; }
+        .badge-status-fixed { background: #064e3b; color: #a7f3d0; border: 1px solid #10b981; }
+        .badge-status-not-affected { background: #334155; color: #cbd5e1; }
+        .badge-cisa { background: #991b1b; color: #fff; font-size: 10px; margin-left: 6px; }
+
+        .risk-score-circle {
+            font-weight: 800;
+            font-size: 15px;
+            background: #0f172a;
+            border: 2px solid var(--border);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .filter-bar {
+            background: var(--surface);
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            min-width: 250px;
+            padding: 8px 12px;
+            background: #0f172a;
+            border: 1px solid var(--border);
+            color: #fff;
+            border-radius: 6px;
+        }
+        select, button {
+            padding: 8px 14px;
+            background: #334155;
+            color: #fff;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover { background: #475569; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background: #111827;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        tr.finding-row:hover { background: var(--surface-hover); }
+        .sub-text { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+        code { background: #0f172a; padding: 2px 5px; border-radius: 4px; font-family: monospace; }
+        
+        .details-pane {
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            margin: 8px 0;
+        }
+        .prereq-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 12px 0;
+        }
+        .prereq-col { background: #1e293b; padding: 12px; border-radius: 6px; font-size: 13px; }
+        .prereq-col ul { margin-left: 20px; margin-top: 6px; }
+        
+        .evidence-box {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .evidence-cmd { font-family: monospace; color: #38bdf8; }
+        .evidence-meta { font-size: 12px; color: var(--text-muted); margin: 4px 0; }
+        .evidence-output {
+            background: #090d16;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #a7f3d0;
+            overflow-x: auto;
+        }
+        .remed-section { margin-top: 10px; }
+        .remed-section pre {
+            background: #090d16;
+            padding: 8px;
+            border-radius: 4px;
+            color: #fbbf24;
+            font-family: monospace;
+            margin-top: 4px;
+        }
+        .mitigation-text { color: #cbd5e1; font-size: 13px; margin-top: 4px; }
+        
+        @media print {
+            body { background: #fff; color: #000; padding: 0; }
+            .card, header, .details-pane { background: #fff; color: #000; border: 1px solid #ccc; }
+            .filter-bar, .btn-toggle { display: none; }
+            .details-row { display: table-row !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>Linux Security Assessment Report</h1>
+                <div class="header-meta">
+                    Target Host: <strong>rocky9-prod-web01.internal</strong> | OS: <strong>Rocky Linux 9.6 (x86_64)</strong> | Cloud: <strong>AWS EC2</strong>
+                </div>
+            </div>
+            <div class="header-meta" style="text-align: right;">
+                <div>Scan Date: <strong>2026-11-20T07:28:30.408642+00:00</strong></div>
+                <div>Scanner: <strong>v1.0.0</strong> (Offline Mode)</div>
+                <div>Duration: <strong>0.0s</strong></div>
+            </div>
+        </header>
+
+        <div class="grid-summary">
+            <div class="card">
+                <div class="card-num" style="color: var(--affected);">4</div>
+                <div class="card-label">Confirmed Affected</div>
+            </div>
+            <div class="card">
+                <div class="card-num" style="color: var(--potential);">0</div>
+                <div class="card-label">Potentially Affected</div>
+            </div>
+            <div class="card">
+                <div class="card-num" style="color: var(--mitigated);">0</div>
+                <div class="card-label">Mitigated by Config</div>
+            </div>
+            <div class="card">
+                <div class="card-num" style="color: var(--fixed);">1</div>
+                <div class="card-label">Vendor Fixed / Patched</div>
+            </div>
+            <div class="card">
+                <div class="card-num" style="color: #ef4444;">1</div>
+                <div class="card-label">CISA Known Exploited</div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 24px;">
+            <h2>System & Hardware Identity</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; font-size: 14px;">
+                <div><strong>Kernel:</strong> 5.14.0-503.14.1.el9_6.x86_64</div>
+                <div><strong>Package Manager:</strong> RPM</div>
+                <div><strong>Platform ID:</strong> platform:el9</div>
+                <div><strong>CPU Model:</strong> Intel(R) Xeon(R) Platinum 8375C CPU @ 2.80GHz</div>
+                <div><strong>CPU AVX-512 VBMI:</strong> Supported</div>
+                <div><strong>Virtualization:</strong> kvm</div>
+                <div><strong>Total Packages Installed:</strong> 12</div>
+                <div><strong>Active Services:</strong> 3</div>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <input type="text" id="searchInput" placeholder="Search CVE ID, component (e.g. nginx, java, sudo), or title..." onkeyup="filterTable()">
+            <select id="severityFilter" onchange="filterTable()">
+                <option value="ALL">All Severities</option>
+                <option value="CRITICAL">Critical</option>
+                <option value="HIGH">High</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="LOW">Low</option>
+            </select>
+            <select id="statusFilter" onchange="filterTable()">
+                <option value="ALL">All Statuses</option>
+                <option value="Affected">Affected</option>
+                <option value="Potentially affected">Potentially affected</option>
+                <option value="Mitigated">Mitigated</option>
+                <option value="Fixed">Fixed</option>
+                <option value="Not affected">Not affected</option>
+            </select>
+            <button onclick="resetFilters()">Reset Filters</button>
+            <button onclick="window.print()">Print / Export PDF</button>
+        </div>
+
+        <div class="card">
+            <h2>Evaluated Vulnerabilities & Applicability (5)</h2>
+            <table id="findingsTable">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>CVE & Advisory</th>
+                        <th>Component</th>
+                        <th>Severity & Scores</th>
+                        <th>Status</th>
+                        <th>Risk</th>
+                        <th>Evidence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr class="finding-row sev-high status-affected" data-cve="CVE-2023-44487" data-comp="nginx" data-sev="HIGH" data-status="Affected">
+                <td class="col-rank">#1</td>
+                <td class="col-cve">
+                    <strong>CVE-2023-44487</strong>
+                    <span class="badge badge-cisa">CISA KEV</span>
+                    <div class="sub-text">HTTP/2 Rapid Reset Denial of Service (DDoS)</div>
+                </td>
+                <td class="col-comp">
+                    <code>nginx</code>
+                    <div class="sub-text">Inst: nginx-1:1.20.1-14.el9_2.1.x86_64</div>
+                    <div class="sub-text">Fix: 1:1.20.1-14.el9_2.3</div>
+                </td>
+                <td class="col-sev">
+                    <span class="badge badge-sev-high">HIGH</span>
+                    <div class="sub-text">CVSS: 7.5</div>
+                    <div class="sub-text">EPSS: 88.4%</div>
+                </td>
+                <td class="col-status">
+                    <span class="badge badge-status-affected">Affected</span>
+                    <div class="sub-text">Confidence: High</div>
+                </td>
+                <td class="col-score">
+                    <div class="risk-score-circle">81.2</div>
+                </td>
+                <td class="col-actions">
+                    <button class="btn-toggle" onclick="toggleDetails('CVE-2023-44487')">Details &darr;</button>
+                </td>
+            </tr>
+            <tr id="details-CVE-2023-44487" class="details-row" style="display: none;">
+                <td colspan="7">
+                    <div class="details-pane">
+                        <h4>Applicability Assessment</h4>
+                        <p><strong>Conclusion:</strong> Confirmed vulnerable package installed (nginx-1:1.20.1-14.el9_2.1.x86_64) and all prerequisites met (Service 'nginx' is running, Configuration directive 'http2' is enabled).</p>
+                        
+                        <div class="prereq-container">
+                            <div class="prereq-col">
+                                <strong>Conditions Met:</strong>
+                                <ul><li>Service 'nginx' is running</li><li>Configuration directive 'http2' is enabled</li></ul>
+                            </div>
+                            <div class="prereq-col">
+                                <strong>Conditions Not Met / Absent:</strong>
+                                <ul><li>None</li></ul>
+                            </div>
+                        </div>
+
+                        <h4>Authoritative Evidence</h4>
+                        
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ rpm -q nginx-1:1.20.1-14.el9_2.1.x86_64</code></div>
+                    <div class="evidence-meta">Source: /var/lib/rpm | Interpretation: RPM EVR comparison: 1:1.20.1-14.el9_2.1 vs 1:1.20.1-14.el9_2.3 -> Installed is less (potentially vulnerable).</div>
+                    <pre class="evidence-output">Installed: nginx-1:1.20.1-14.el9_2.1.x86_64 | Vendor Fixed: 1:1.20.1-14.el9_2.3</pre>
+                </div>
+                
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ systemctl status nginx</code></div>
+                    <div class="evidence-meta">Source: systemd | Interpretation: Service 'nginx' is actively executing and listening for network connections.</div>
+                    <pre class="evidence-output">Active: active (running)</pre>
+                </div>
+                
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ nginx -T | grep http2</code></div>
+                    <div class="evidence-meta">Source: /etc/nginx/nginx.conf | Interpretation: Configuration condition met: 'http2' is set to 'enabled', enabling vulnerable attack surface.</div>
+                    <pre class="evidence-output">listen 443 ssl http2;</pre>
+                </div>
+                
+
+                        <h4>Remediation & Verification</h4>
+                        <p>sudo dnf update nginx</p>
+                        
+                <div class="remed-section">
+                    <strong>Remediation Command:</strong>
+                    <pre><code>sudo dnf update nginx</code></pre>
+                </div>
+                
+                <div class="remed-section">
+                    <strong>Verification Command:</strong>
+                    <pre><code>rpm -q --changelog nginx | grep -i 'CVE-2023-44487' || dnf updateinfo info --cve CVE-2023-44487</code></pre>
+                </div>
+                
+                <div class="remed-section">
+                    <strong>Temporary Mitigation:</strong>
+                    <div class="mitigation-text">Remove http2 parameter from listen directives.</div>
+                </div>
+                
+
+                        <h4>Advisory & References</h4>
+                        <p>Source: Rocky Linux (RHSA-2023:5468)</p>
+                        <ul><li><a href="https://access.redhat.com/security/cve/CVE-2023-44487" target="_blank" rel="noopener">https://access.redhat.com/security/cve/CVE-2023-44487</a></li></ul>
+                    </div>
+                </td>
+            </tr>
+            
+
+            <tr class="finding-row sev-high status-affected" data-cve="CVE-2026-123633" data-comp="nginx" data-sev="HIGH" data-status="Affected">
+                <td class="col-rank">#2</td>
+                <td class="col-cve">
+                    <strong>CVE-2026-123633</strong>
+                    
+                    <div class="sub-text">NGINX HTTP/2 Rapid Stream Cancellation High CPU Resource Exhaustion</div>
+                </td>
+                <td class="col-comp">
+                    <code>nginx</code>
+                    <div class="sub-text">Inst: nginx-1:1.20.1-14.el9_2.1.x86_64</div>
+                    <div class="sub-text">Fix: 1:1.20.1-14.el9_2.3</div>
+                </td>
+                <td class="col-sev">
+                    <span class="badge badge-sev-high">HIGH</span>
+                    <div class="sub-text">CVSS: 7.5</div>
+                    <div class="sub-text">EPSS: 72.9%</div>
+                </td>
+                <td class="col-status">
+                    <span class="badge badge-status-affected">Affected</span>
+                    <div class="sub-text">Confidence: High</div>
+                </td>
+                <td class="col-score">
+                    <div class="risk-score-circle">61.2</div>
+                </td>
+                <td class="col-actions">
+                    <button class="btn-toggle" onclick="toggleDetails('CVE-2026-123633')">Details &darr;</button>
+                </td>
+            </tr>
+            <tr id="details-CVE-2026-123633" class="details-row" style="display: none;">
+                <td colspan="7">
+                    <div class="details-pane">
+                        <h4>Applicability Assessment</h4>
+                        <p><strong>Conclusion:</strong> Confirmed vulnerable package installed (nginx-1:1.20.1-14.el9_2.1.x86_64) and all prerequisites met (Service 'nginx' is running, Configuration directive 'http2' is enabled).</p>
+                        
+                        <div class="prereq-container">
+                            <div class="prereq-col">
+                                <strong>Conditions Met:</strong>
+                                <ul><li>Service 'nginx' is running</li><li>Configuration directive 'http2' is enabled</li></ul>
+                            </div>
+                            <div class="prereq-col">
+                                <strong>Conditions Not Met / Absent:</strong>
+                                <ul><li>None</li></ul>
+                            </div>
+                        </div>
+
+                        <h4>Authoritative Evidence</h4>
+                        
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ rpm -q nginx-1:1.20.1-14.el9_2.1.x86_64</code></div>
+                    <div class="evidence-meta">Source: /var/lib/rpm | Interpretation: RPM EVR comparison: 1:1.20.1-14.el9_2.1 vs 1:1.20.1-14.el9_2.3 -> Installed is less (potentially vulnerable).</div>
+                    <pre class="evidence-output">Installed: nginx-1:1.20.1-14.el9_2.1.x86_64 | Vendor Fixed: 1:1.20.1-14.el9_2.3</pre>
+                </div>
+                
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ systemctl status nginx</code></div>
+                    <div class="evidence-meta">Source: systemd | Interpretation: Service 'nginx' is actively executing and listening for network connections.</div>
+                    <pre class="evidence-output">Active: active (running)</pre>
+                </div>
+                
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ nginx -T | grep http2</code></div>
+                    <div class="evidence-meta">Source: /etc/nginx/nginx.conf | Interpretation: Configuration condition met: 'http2' is set to 'enabled', enabling vulnerable attack surface.</div>
+                    <pre class="evidence-output">listen 443 ssl http2;</pre>
+                </div>
+                
+
+                        <h4>Remediation & Verification</h4>
+                        <p>Apply updated Rocky Linux package: sudo dnf update nginx</p>
+                        
+                <div class="remed-section">
+                    <strong>Remediation Command:</strong>
+                    <pre><code>sudo dnf update nginx</code></pre>
+                </div>
+                
+                <div class="remed-section">
+                    <strong>Verification Command:</strong>
+                    <pre><code>rpm -q --changelog nginx | grep -i 'CVE-2026-123633' || dnf updateinfo info --cve CVE-2026-123633</code></pre>
+                </div>
+                
+                <div class="remed-section">
+                    <strong>Temporary Mitigation:</strong>
+                    <div class="mitigation-text">Disable HTTP/2 on listening ports by removing 'http2' parameter from listen directives in /etc/nginx/nginx.conf.</div>
+                </div>
+                
+
+                        <h4>Advisory & References</h4>
+                        <p>Source: Rocky Linux (RLSA-2026:1236)</p>
+                        <ul><li><a href="https://errata.rockylinux.org/RLSA-2026:1236" target="_blank" rel="noopener">https://errata.rockylinux.org/RLSA-2026:1236</a></li><li><a href="https://access.redhat.com/security/cve/CVE-2026-123633" target="_blank" rel="noopener">https://access.redhat.com/security/cve/CVE-2026-123633</a></li><li><a href="https://nginx.org/en/security_advisories.html" target="_blank" rel="noopener">https://nginx.org/en/security_advisories.html</a></li></ul>
+                    </div>
+                </td>
+            </tr>
+            
+
+            <tr class="finding-row sev-high status-affected" data-cve="CVE-2026-123007" data-comp="nginx" data-sev="HIGH" data-status="Affected">
+                <td class="col-rank">#3</td>
+                <td class="col-cve">
+                    <strong>CVE-2026-123007</strong>
+                    
+                    <div class="sub-text">NGINX HTTP/2 HPACK Dynamic Table State Synchronization Deserialization Flaw</div>
+                </td>
+                <td class="col-comp">
+                    <code>nginx</code>
+                    <div class="sub-text">Inst: nginx-1:1.20.1-14.el9_2.1.x86_64</div>
+                    <div class="sub-text">Fix: 1:1.20.1-14.el9_2.3</div>
+                </td>
+                <td class="col-sev">
+                    <span class="badge badge-sev-high">HIGH</span>
+                    <div class="sub-text">CVSS: 8.2</div>
+                    <div class="sub-text">EPSS: 38.1%</div>
+                </td>
+                <td class="col-status">
+                    <span class="badge badge-status-affected">Affected</span>
+                    <div class="sub-text">Confidence: High</div>
+                </td>
+                <td class="col-score">
+                    <div class="risk-score-circle">52.0</div>
+                </td>
+                <td class="col-actions">
+                    <button class="btn-toggle" onclick="toggleDetails('CVE-2026-123007')">Details &darr;</button>
+                </td>
+            </tr>
+            <tr id="details-CVE-2026-123007" class="details-row" style="display: none;">
+                <td colspan="7">
+                    <div class="details-pane">
+                        <h4>Applicability Assessment</h4>
+                        <p><strong>Conclusion:</strong> Confirmed vulnerable package installed (nginx-1:1.20.1-14.el9_2.1.x86_64) and all prerequisites met (Service 'nginx' is running, Configuration directive 'http2' is enabled).</p>
+                        
+                        <div class="prereq-container">
+                            <div class="prereq-col">
+                                <strong>Conditions Met:</strong>
+                                <ul><li>Service 'nginx' is running</li><li>Configuration directive 'http2' is enabled</li></ul>
+                            </div>
+                            <div class="prereq-col">
+                                <strong>Conditions Not Met / Absent:</strong>
+                                <ul><li>None</li></ul>
+                            </div>
+                        </div>
+
+                        <h4>Authoritative Evidence</h4>
+                        
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ rpm -q nginx-1:1.20.1-14.el9_2.1.x86_64</code></div>
+                    <div class="evidence-meta">Source: /var/lib/rpm | Interpretation: RPM EVR comparison: 1:1.20.1-14.el9_2.1 vs 1:1.20.1-14.el9_2.3 -> Installed is less (potentially vulnerable).</div>
+                    <pre class="evidence-output">Installed: nginx-1:1.20.1-14.el9_2.1.x86_64 | Vendor Fixed: 1:1.20.1-14.el9_2.3</pre>
+                </div>
+                
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ systemctl status nginx</code></div>
+                    <div class="evidence-meta">Source: systemd | Interpretation: Service 'nginx' is actively executing and listening for network connections.</div>
+                    <pre class="evidence-output">Active: active (running)</pre>
+                </div>
+                
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ nginx -T | grep http2</code></div>
+                    <div class="evidence-meta">Source: /etc/nginx/nginx.conf | Interpretation: Configuration condition met: 'http2' is set to 'enabled', enabling vulnerable attack surface.</div>
+                    <pre class="evidence-output">listen 443 ssl http2;</pre>
+                </div>
+                
+
+                        <h4>Remediation & Verification</h4>
+                        <p>Update nginx package to fixed vendor release 1:1.20.1-14.el9_2.3 via dnf.</p>
+                        
+                <div class="remed-section">
+                    <strong>Remediation Command:</strong>
+                    <pre><code>sudo dnf update nginx</code></pre>
+                </div>
+                
+                <div class="remed-section">
+                    <strong>Verification Command:</strong>
+                    <pre><code>rpm -q --changelog nginx | grep -i 'CVE-2026-123007' || dnf updateinfo info --cve CVE-2026-123007</code></pre>
+                </div>
+                
+                <div class="remed-section">
+                    <strong>Temporary Mitigation:</strong>
+                    <div class="mitigation-text">Disable HTTP/2 protocol support in server configurations.</div>
+                </div>
+                
+
+                        <h4>Advisory & References</h4>
+                        <p>Source: Rocky Linux (RLSA-2026:1230)</p>
+                        <ul><li><a href="https://errata.rockylinux.org/RLSA-2026:1230" target="_blank" rel="noopener">https://errata.rockylinux.org/RLSA-2026:1230</a></li><li><a href="https://access.redhat.com/security/cve/CVE-2026-123007" target="_blank" rel="noopener">https://access.redhat.com/security/cve/CVE-2026-123007</a></li></ul>
+                    </div>
+                </td>
+            </tr>
+            
+
+            <tr class="finding-row sev-high status-affected" data-cve="CVE-2026-114938" data-comp="java-17-openjdk" data-sev="HIGH" data-status="Affected">
+                <td class="col-rank">#4</td>
+                <td class="col-cve">
+                    <strong>CVE-2026-114938</strong>
+                    
+                    <div class="sub-text">OpenJDK AVX-512 VBMI Base64 Decoding Out-of-Bounds Memory Corruption</div>
+                </td>
+                <td class="col-comp">
+                    <code>java-17-openjdk</code>
+                    <div class="sub-text">Inst: java-17-openjdk-1:17.0.8-7.el9.x86_64</div>
+                    <div class="sub-text">Fix: 1:17.0.9-1.el9</div>
+                </td>
+                <td class="col-sev">
+                    <span class="badge badge-sev-high">HIGH</span>
+                    <div class="sub-text">CVSS: 7.5</div>
+                    <div class="sub-text">EPSS: 14.2%</div>
+                </td>
+                <td class="col-status">
+                    <span class="badge badge-status-affected">Affected</span>
+                    <div class="sub-text">Confidence: High</div>
+                </td>
+                <td class="col-score">
+                    <div class="risk-score-circle">41.2</div>
+                </td>
+                <td class="col-actions">
+                    <button class="btn-toggle" onclick="toggleDetails('CVE-2026-114938')">Details &darr;</button>
+                </td>
+            </tr>
+            <tr id="details-CVE-2026-114938" class="details-row" style="display: none;">
+                <td colspan="7">
+                    <div class="details-pane">
+                        <h4>Applicability Assessment</h4>
+                        <p><strong>Conclusion:</strong> Confirmed vulnerable package installed (java-17-openjdk-1:17.0.8-7.el9.x86_64) and all prerequisites met (CPU instruction flag 'avx512_vbmi' present, JVM Base64 intrinsic enabled (default)).</p>
+                        
+                        <div class="prereq-container">
+                            <div class="prereq-col">
+                                <strong>Conditions Met:</strong>
+                                <ul><li>CPU instruction flag 'avx512_vbmi' present</li><li>JVM Base64 intrinsic enabled (default)</li></ul>
+                            </div>
+                            <div class="prereq-col">
+                                <strong>Conditions Not Met / Absent:</strong>
+                                <ul><li>None</li></ul>
+                            </div>
+                        </div>
+
+                        <h4>Authoritative Evidence</h4>
+                        
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ rpm -q java-17-openjdk-1:17.0.8-7.el9.x86_64</code></div>
+                    <div class="evidence-meta">Source: /var/lib/rpm | Interpretation: RPM EVR comparison: 1:17.0.8-7.el9 vs 1:17.0.9-1.el9 -> Installed is less (potentially vulnerable).</div>
+                    <pre class="evidence-output">Installed: java-17-openjdk-1:17.0.8-7.el9.x86_64 | Vendor Fixed: 1:17.0.9-1.el9</pre>
+                </div>
+                
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ grep flags /proc/cpuinfo</code></div>
+                    <div class="evidence-meta">Source: /proc/cpuinfo | Interpretation: Host CPU supports required hardware extension 'avx512_vbmi' for vulnerability exploit path.</div>
+                    <pre class="evidence-output">flags: ... avx512_vbmi ...</pre>
+                </div>
+                
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ ps -eo pid,args | grep java</code></div>
+                    <div class="evidence-meta">Source: running JVM cmdline | Interpretation: Vulnerable intrinsic is active in JVM runtime.</div>
+                    <pre class="evidence-output">No disabling flag found in JVM arguments</pre>
+                </div>
+                
+
+                        <h4>Remediation & Verification</h4>
+                        <p>Upgrade java-17-openjdk to version 1:17.0.9-1.el9 or later using dnf.</p>
+                        
+                <div class="remed-section">
+                    <strong>Remediation Command:</strong>
+                    <pre><code>sudo dnf update java-17-openjdk</code></pre>
+                </div>
+                
+                <div class="remed-section">
+                    <strong>Verification Command:</strong>
+                    <pre><code>rpm -q --changelog java-17-openjdk | grep -i 'CVE-2026-114938' || dnf updateinfo info --cve CVE-2026-114938</code></pre>
+                </div>
+                
+                <div class="remed-section">
+                    <strong>Temporary Mitigation:</strong>
+                    <div class="mitigation-text">Disable the vulnerable JVM Base64 intrinsic by passing '-XX:-UseBase64Intrinsics' or disable AVX-512 via '-XX:UseAVX=2' in JAVA_OPTS.</div>
+                </div>
+                
+
+                        <h4>Advisory & References</h4>
+                        <p>Source: Rocky Linux (RLSA-2026:1149)</p>
+                        <ul><li><a href="https://errata.rockylinux.org/RLSA-2026:1149" target="_blank" rel="noopener">https://errata.rockylinux.org/RLSA-2026:1149</a></li><li><a href="https://access.redhat.com/security/cve/CVE-2026-114938" target="_blank" rel="noopener">https://access.redhat.com/security/cve/CVE-2026-114938</a></li><li><a href="https://bugs.openjdk.org/browse/JDK-8321456" target="_blank" rel="noopener">https://bugs.openjdk.org/browse/JDK-8321456</a></li></ul>
+                    </div>
+                </td>
+            </tr>
+            
+
+            <tr class="finding-row sev-high status-fixed" data-cve="CVE-2021-3156" data-comp="sudo" data-sev="HIGH" data-status="Fixed">
+                <td class="col-rank">#5</td>
+                <td class="col-cve">
+                    <strong>CVE-2021-3156</strong>
+                    <span class="badge badge-cisa">CISA KEV</span>
+                    <div class="sub-text">Sudo Baron Samedit Local Privilege Escalation</div>
+                </td>
+                <td class="col-comp">
+                    <code>sudo</code>
+                    <div class="sub-text">Inst: sudo-1.9.5p2-14.el9.x86_64</div>
+                    <div class="sub-text">Fix: 1.9.5p2-14.el9</div>
+                </td>
+                <td class="col-sev">
+                    <span class="badge badge-sev-high">HIGH</span>
+                    <div class="sub-text">CVSS: 7.8</div>
+                    <div class="sub-text">EPSS: 94.2%</div>
+                </td>
+                <td class="col-status">
+                    <span class="badge badge-status-fixed">Fixed</span>
+                    <div class="sub-text">Confidence: High</div>
+                </td>
+                <td class="col-score">
+                    <div class="risk-score-circle">3.6</div>
+                </td>
+                <td class="col-actions">
+                    <button class="btn-toggle" onclick="toggleDetails('CVE-2021-3156')">Details &darr;</button>
+                </td>
+            </tr>
+            <tr id="details-CVE-2021-3156" class="details-row" style="display: none;">
+                <td colspan="7">
+                    <div class="details-pane">
+                        <h4>Applicability Assessment</h4>
+                        <p><strong>Conclusion:</strong> Installed package version (1.9.5p2-14.el9) meets or exceeds vendor fixed release (1.9.5p2-14.el9).</p>
+                        
+                        <div class="prereq-container">
+                            <div class="prereq-col">
+                                <strong>Conditions Met:</strong>
+                                <ul><li>None</li></ul>
+                            </div>
+                            <div class="prereq-col">
+                                <strong>Conditions Not Met / Absent:</strong>
+                                <ul><li>None</li></ul>
+                            </div>
+                        </div>
+
+                        <h4>Authoritative Evidence</h4>
+                        
+                <div class="evidence-box">
+                    <div class="evidence-cmd"><code>$ rpm -q sudo-1.9.5p2-14.el9.x86_64</code></div>
+                    <div class="evidence-meta">Source: /var/lib/rpm | Interpretation: RPM EVR comparison: 0:1.9.5p2-14.el9 vs 0:1.9.5p2-14.el9 -> Installed is greater/equal.</div>
+                    <pre class="evidence-output">Installed: sudo-1.9.5p2-14.el9.x86_64 | Vendor Fixed: 1.9.5p2-14.el9</pre>
+                </div>
+                
+
+                        <h4>Remediation & Verification</h4>
+                        <p>Package is up-to-date with vendor security fix. Maintain regular patching schedule.</p>
+                        
+
+                        <h4>Advisory & References</h4>
+                        <p>Source: Rocky Linux (RHSA-2021:0218)</p>
+                        <ul><li><a href="https://access.redhat.com/security/cve/CVE-2021-3156" target="_blank" rel="noopener">https://access.redhat.com/security/cve/CVE-2021-3156</a></li></ul>
+                    </div>
+                </td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+            <h2>Package Inventory Sample (First 50 of 12)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Package</th>
+                        <th>Version</th>
+                        <th>Release</th>
+                        <th>Arch</th>
+                        <th>Vendor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>kernel</code></td><td>5.14.0</td><td>503.14.1.el9_6</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+<tr><td><code>systemd</code></td><td>252</td><td>46.el9_6</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+<tr><td><code>openssl</code></td><td>3.2.2</td><td>6.el9_6</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+<tr><td><code>openssl-libs</code></td><td>3.2.2</td><td>6.el9_6</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+<tr><td><code>nginx</code></td><td>1.20.1</td><td>14.el9_2.1</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+<tr><td><code>nginx-core</code></td><td>1.20.1</td><td>14.el9_2.1</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+<tr><td><code>java-17-openjdk</code></td><td>17.0.8</td><td>7.el9</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+<tr><td><code>java-17-openjdk-headless</code></td><td>17.0.8</td><td>7.el9</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+<tr><td><code>glibc</code></td><td>2.34</td><td>125.el9_6</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+<tr><td><code>curl</code></td><td>7.76.1</td><td>31.el9_6</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+<tr><td><code>sudo</code></td><td>1.9.5p2</td><td>14.el9</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+<tr><td><code>python3</code></td><td>3.9.21</td><td>1.el9_6</td><td>x86_64</td><td>Rocky Enterprise Software Foundation</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails(cveId) {
+            const row = document.getElementById('details-' + cveId);
+            if (row.style.display === 'none') {
+                row.style.display = 'table-row';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+
+        function filterTable() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const sev = document.getElementById('severityFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            const rows = document.querySelectorAll('.finding-row');
+
+            rows.forEach(row => {
+                const cve = row.getAttribute('data-cve').toLowerCase();
+                const comp = row.getAttribute('data-comp').toLowerCase();
+                const rSev = row.getAttribute('data-sev');
+                const rStatus = row.getAttribute('data-status');
+                const text = row.innerText.toLowerCase();
+
+                const matchesSearch = !search || text.includes(search) || cve.includes(search) || comp.includes(search);
+                const matchesSev = (sev === 'ALL') || (rSev === sev);
+                const matchesStatus = (status === 'ALL') || (rStatus === status);
+
+                if (matchesSearch && matchesSev && matchesStatus) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                    const cveId = row.getAttribute('data-cve');
+                    const detailsRow = document.getElementById('details-' + cveId);
+                    if (detailsRow) detailsRow.style.display = 'none';
+                }
+            });
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('severityFilter').value = 'ALL';
+            document.getElementById('statusFilter').value = 'ALL';
+            filterTable();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [6 0 R 8 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 7 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 6538 >>
+stream
+0.08 0.18 0.36 rg 30.0 715.0 552.0 50.0 re f
+BT /F2 15 Tf 1.00 1.00 1.00 rg 45.0 742.0 Td (LINUX VULNERABILITY ASSESSMENT REPORT) Tj ET
+BT /F1 10 Tf 0.85 0.90 1.00 rg 45.0 725.0 Td (Target: rocky9-prod-web01.internal \(Rocky Linux 9.6\)) Tj ET
+0.94 0.96 0.98 rg 30.0 640.0 552.0 60.0 re f
+BT /F2 10 Tf 0.10 0.10 0.10 rg 40.0 685.0 Td (Assessment Metadata) Tj ET
+BT /F1 9 Tf 0.20 0.20 0.20 rg 40.0 670.0 Td (Scan Timestamp: 2026-11-20T07:28:30.408642+00:00) Tj ET
+BT /F1 9 Tf 0.20 0.20 0.20 rg 40.0 655.0 Td (Scanner Version: v1.0.0 \(Offline Mode\)) Tj ET
+BT /F1 9 Tf 0.20 0.20 0.20 rg 340.0 670.0 Td (Scan Duration: 0.0s) Tj ET
+BT /F1 9 Tf 0.20 0.20 0.20 rg 340.0 655.0 Td (Total Packages: 12) Tj ET
+BT /F2 11 Tf 0.10 0.20 0.40 rg 30.0 620.0 Td (EXECUTIVE VULNERABILITY SUMMARY) Tj ET
+0.80 0.80 0.80 RG 1 w 30.0 615.0 m 582.0 615.0 l S
+0.90 0.30 0.30 rg 30.0 555.0 100.0 50.0 re f
+BT /F2 18 Tf 1.00 1.00 1.00 rg 70.0 581.0 Td (4) Tj ET
+BT /F2 8 Tf 1.00 1.00 1.00 rg 52.0 565.0 Td (AFFECTED) Tj ET
+0.95 0.60 0.10 rg 142.0 555.0 100.0 50.0 re f
+BT /F2 18 Tf 1.00 1.00 1.00 rg 182.0 581.0 Td (0) Tj ET
+BT /F2 8 Tf 1.00 1.00 1.00 rg 165.0 565.0 Td (POTENTIAL) Tj ET
+0.55 0.35 0.80 rg 254.0 555.0 100.0 50.0 re f
+BT /F2 18 Tf 1.00 1.00 1.00 rg 294.0 581.0 Td (0) Tj ET
+BT /F2 8 Tf 1.00 1.00 1.00 rg 276.0 565.0 Td (MITIGATED) Tj ET
+0.10 0.65 0.45 rg 366.0 555.0 100.0 50.0 re f
+BT /F2 18 Tf 1.00 1.00 1.00 rg 406.0 581.0 Td (1) Tj ET
+BT /F2 8 Tf 1.00 1.00 1.00 rg 396.0 565.0 Td (FIXED) Tj ET
+0.75 0.10 0.10 rg 478.0 555.0 104.0 50.0 re f
+BT /F2 18 Tf 1.00 1.00 1.00 rg 520.0 581.0 Td (1) Tj ET
+BT /F2 8 Tf 1.00 1.00 1.00 rg 508.0 565.0 Td (CISA KEV) Tj ET
+BT /F2 11 Tf 0.10 0.20 0.40 rg 30.0 520.0 Td (TARGET SYSTEM PROFILE) Tj ET
+0.80 0.80 0.80 RG 1 w 30.0 515.0 m 582.0 515.0 l S
+BT /F2 9 Tf 0.20 0.20 0.20 rg 40.0 495.0 Td (Operating System:) Tj ET
+BT /F1 9 Tf 0.10 0.10 0.10 rg 200.0 495.0 Td (Rocky Linux 9.6 \(Blue Onyx\)) Tj ET
+0.92 0.92 0.92 RG 1 w 40.0 491.0 m 570.0 491.0 l S
+BT /F2 9 Tf 0.20 0.20 0.20 rg 40.0 477.0 Td (Kernel Release:) Tj ET
+BT /F1 9 Tf 0.10 0.10 0.10 rg 200.0 477.0 Td (5.14.0-503.14.1.el9_6.x86_64) Tj ET
+0.92 0.92 0.92 RG 1 w 40.0 473.0 m 570.0 473.0 l S
+BT /F2 9 Tf 0.20 0.20 0.20 rg 40.0 459.0 Td (Architecture:) Tj ET
+BT /F1 9 Tf 0.10 0.10 0.10 rg 200.0 459.0 Td (x86_64) Tj ET
+0.92 0.92 0.92 RG 1 w 40.0 455.0 m 570.0 455.0 l S
+BT /F2 9 Tf 0.20 0.20 0.20 rg 40.0 441.0 Td (Platform ID:) Tj ET
+BT /F1 9 Tf 0.10 0.10 0.10 rg 200.0 441.0 Td (platform:el9) Tj ET
+0.92 0.92 0.92 RG 1 w 40.0 437.0 m 570.0 437.0 l S
+BT /F2 9 Tf 0.20 0.20 0.20 rg 40.0 423.0 Td (CPU Processor:) Tj ET
+BT /F1 9 Tf 0.10 0.10 0.10 rg 200.0 423.0 Td (Intel\(R\) Xeon\(R\) Platinum 8375C CPU @ 2.80GHz) Tj ET
+0.92 0.92 0.92 RG 1 w 40.0 419.0 m 570.0 419.0 l S
+BT /F2 9 Tf 0.20 0.20 0.20 rg 40.0 405.0 Td (CPU AVX-512 VBMI:) Tj ET
+BT /F1 9 Tf 0.10 0.10 0.10 rg 200.0 405.0 Td (Supported \(Active\)) Tj ET
+0.92 0.92 0.92 RG 1 w 40.0 401.0 m 570.0 401.0 l S
+BT /F2 9 Tf 0.20 0.20 0.20 rg 40.0 387.0 Td (Virtualization / Cloud:) Tj ET
+BT /F1 9 Tf 0.10 0.10 0.10 rg 200.0 387.0 Td (kvm / AWS EC2) Tj ET
+0.92 0.92 0.92 RG 1 w 40.0 383.0 m 570.0 383.0 l S
+BT /F2 9 Tf 0.20 0.20 0.20 rg 40.0 369.0 Td (Active Services:) Tj ET
+BT /F1 9 Tf 0.10 0.10 0.10 rg 200.0 369.0 Td (3) Tj ET
+0.92 0.92 0.92 RG 1 w 40.0 365.0 m 570.0 365.0 l S
+BT /F2 11 Tf 0.10 0.20 0.40 rg 30.0 336.0 Td (TOP PRIORITIZED VULNERABILITY FINDINGS) Tj ET
+0.80 0.80 0.80 RG 1 w 30.0 331.0 m 582.0 331.0 l S
+0.85 0.88 0.92 rg 30.0 314.0 552.0 16.0 re f
+BT /F2 8 Tf 0.00 0.00 0.00 rg 35.0 318.0 Td (Rank) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 65.0 318.0 Td (CVE ID) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 160.0 318.0 Td (Component) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 240.0 318.0 Td (Severity) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 300.0 318.0 Td (Status) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 410.0 318.0 Td (Risk) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 445.0 318.0 Td (Remediation Action) Tj ET
+BT /F1 8 Tf 0.00 0.00 0.00 rg 35.0 302.0 Td (#1) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 65.0 302.0 Td (CVE-2023-44487) Tj ET
+BT /F1 8 Tf 0.00 0.00 0.00 rg 160.0 302.0 Td (nginx) Tj ET
+BT /F1 8 Tf 0.00 0.00 0.00 rg 240.0 302.0 Td (HIGH \(7.5\)) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 300.0 302.0 Td (Affected) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 410.0 302.0 Td (81.2) Tj ET
+BT /F3 8 Tf 0.00 0.00 0.00 rg 445.0 302.0 Td (sudo dnf update nginx) Tj ET
+0.90 0.90 0.90 RG 1 w 30.0 298.0 m 582.0 298.0 l S
+BT /F1 8 Tf 0.00 0.00 0.00 rg 35.0 286.0 Td (#2) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 65.0 286.0 Td (CVE-2026-123633) Tj ET
+BT /F1 8 Tf 0.00 0.00 0.00 rg 160.0 286.0 Td (nginx) Tj ET
+BT /F1 8 Tf 0.00 0.00 0.00 rg 240.0 286.0 Td (HIGH \(7.5\)) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 300.0 286.0 Td (Affected) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 410.0 286.0 Td (61.2) Tj ET
+BT /F3 8 Tf 0.00 0.00 0.00 rg 445.0 286.0 Td (sudo dnf update nginx) Tj ET
+0.90 0.90 0.90 RG 1 w 30.0 282.0 m 582.0 282.0 l S
+BT /F1 8 Tf 0.00 0.00 0.00 rg 35.0 270.0 Td (#3) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 65.0 270.0 Td (CVE-2026-123007) Tj ET
+BT /F1 8 Tf 0.00 0.00 0.00 rg 160.0 270.0 Td (nginx) Tj ET
+BT /F1 8 Tf 0.00 0.00 0.00 rg 240.0 270.0 Td (HIGH \(8.2\)) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 300.0 270.0 Td (Affected) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 410.0 270.0 Td (52.0) Tj ET
+BT /F3 8 Tf 0.00 0.00 0.00 rg 445.0 270.0 Td (sudo dnf update nginx) Tj ET
+0.90 0.90 0.90 RG 1 w 30.0 266.0 m 582.0 266.0 l S
+BT /F1 8 Tf 0.00 0.00 0.00 rg 35.0 254.0 Td (#4) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 65.0 254.0 Td (CVE-2026-114938) Tj ET
+BT /F1 8 Tf 0.00 0.00 0.00 rg 160.0 254.0 Td (java-17-openjd) Tj ET
+BT /F1 8 Tf 0.00 0.00 0.00 rg 240.0 254.0 Td (HIGH \(7.5\)) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 300.0 254.0 Td (Affected) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 410.0 254.0 Td (41.2) Tj ET
+BT /F3 8 Tf 0.00 0.00 0.00 rg 445.0 254.0 Td (sudo dnf update java-17-open) Tj ET
+0.90 0.90 0.90 RG 1 w 30.0 250.0 m 582.0 250.0 l S
+BT /F1 8 Tf 0.00 0.00 0.00 rg 35.0 238.0 Td (#5) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 65.0 238.0 Td (CVE-2021-3156) Tj ET
+BT /F1 8 Tf 0.00 0.00 0.00 rg 160.0 238.0 Td (sudo) Tj ET
+BT /F1 8 Tf 0.00 0.00 0.00 rg 240.0 238.0 Td (HIGH \(7.8\)) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 300.0 238.0 Td (Fixed) Tj ET
+BT /F2 8 Tf 0.00 0.00 0.00 rg 410.0 238.0 Td (3.6) Tj ET
+BT /F3 8 Tf 0.00 0.00 0.00 rg 445.0 238.0 Td (Package is up-to-date with v) Tj ET
+0.90 0.90 0.90 RG 1 w 30.0 234.0 m 582.0 234.0 l S
+BT /F1 9 Tf 0.5 0.5 0.5 rg 40 25 Td (Page 1 of 2  |  Linux Vulnerability Scanner Assessment Report) Tj ET
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 9 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> >>
+endobj
+9 0 obj
+<< /Length 5738 >>
+stream
+BT /F2 13 Tf 0.10 0.20 0.40 rg 30.0 740.0 Td (DETAILED CVE APPLICABILITY & EVIDENCE AUDIT) Tj ET
+0.80 0.80 0.80 RG 1 w 30.0 732.0 m 582.0 732.0 l S
+0.93 0.95 0.98 rg 30.0 706.0 552.0 20.0 re f
+BT /F2 9 Tf 0.10 0.20 0.40 rg 35.0 712.0 Td (#1  CVE-2023-44487 - HTTP/2 Rapid Reset Denial of Service \(DDoS\) | CISA KEV ACTIVE EXPLOIT) Tj ET
+BT /F1 8 Tf 0.30 0.30 0.30 rg 40.0 692.0 Td (Component: nginx  |  Inst: nginx-1:1.20.1-14.el9_2.1.x86_64  |  Fixed: 1:1.20.1-14.el9_2.3  |  CVSS: 7.5  |  EPSS: 88.4%) Tj ET
+BT /F2 8 Tf 0.80 0.20 0.20 rg 40.0 678.0 Td (Status: AFFECTED \(Confidence: High\)) Tj ET
+BT /F1 8 Tf 0.10 0.10 0.10 rg 40.0 666.0 Td (Applicability: Confirmed vulnerable package installed \(nginx-1:1.20.1-14.el9_2.1.x86_64\) and all prerequisites) Tj ET
+BT /F3 8 Tf 0.60 0.30 0.00 rg 40.0 652.0 Td (Remediation: sudo dnf update nginx) Tj ET
+BT /F3 8 Tf 0.10 0.40 0.20 rg 40.0 640.0 Td (Verification: rpm -q --changelog nginx | grep -i 'CVE-2023-44487' || dnf updateinfo info --cve CVE-) Tj ET
+BT /F3 7 Tf 0.20 0.20 0.40 rg 40.0 628.0 Td (Audited Evidence: $ rpm -q nginx-1:1.20.1-14.el9_2.1.x86_64) Tj ET
+BT /F3 7 Tf 0.10 0.50 0.30 rg 48.0 618.0 Td (-> Installed: nginx-1:1.20.1-14.el9_2.1.x86_64 | Vendor Fixed: 1:1.20.1-14.el9_2.3) Tj ET
+0.85 0.85 0.85 RG 1 w 30.0 608.0 m 582.0 608.0 l S
+0.93 0.95 0.98 rg 30.0 590.0 552.0 20.0 re f
+BT /F2 9 Tf 0.10 0.20 0.40 rg 35.0 596.0 Td (#2  CVE-2026-123633 - NGINX HTTP/2 Rapid Stream Cancellation High CPU Resourc) Tj ET
+BT /F1 8 Tf 0.30 0.30 0.30 rg 40.0 576.0 Td (Component: nginx  |  Inst: nginx-1:1.20.1-14.el9_2.1.x86_64  |  Fixed: 1:1.20.1-14.el9_2.3  |  CVSS: 7.5  |  EPSS: 72.9%) Tj ET
+BT /F2 8 Tf 0.80 0.20 0.20 rg 40.0 562.0 Td (Status: AFFECTED \(Confidence: High\)) Tj ET
+BT /F1 8 Tf 0.10 0.10 0.10 rg 40.0 550.0 Td (Applicability: Confirmed vulnerable package installed \(nginx-1:1.20.1-14.el9_2.1.x86_64\) and all prerequisites) Tj ET
+BT /F3 8 Tf 0.60 0.30 0.00 rg 40.0 536.0 Td (Remediation: sudo dnf update nginx) Tj ET
+BT /F3 8 Tf 0.10 0.40 0.20 rg 40.0 524.0 Td (Verification: rpm -q --changelog nginx | grep -i 'CVE-2026-123633' || dnf updateinfo info --cve CVE) Tj ET
+BT /F3 7 Tf 0.20 0.20 0.40 rg 40.0 512.0 Td (Audited Evidence: $ rpm -q nginx-1:1.20.1-14.el9_2.1.x86_64) Tj ET
+BT /F3 7 Tf 0.10 0.50 0.30 rg 48.0 502.0 Td (-> Installed: nginx-1:1.20.1-14.el9_2.1.x86_64 | Vendor Fixed: 1:1.20.1-14.el9_2.3) Tj ET
+0.85 0.85 0.85 RG 1 w 30.0 492.0 m 582.0 492.0 l S
+0.93 0.95 0.98 rg 30.0 474.0 552.0 20.0 re f
+BT /F2 9 Tf 0.10 0.20 0.40 rg 35.0 480.0 Td (#3  CVE-2026-123007 - NGINX HTTP/2 HPACK Dynamic Table State Synchronization ) Tj ET
+BT /F1 8 Tf 0.30 0.30 0.30 rg 40.0 460.0 Td (Component: nginx  |  Inst: nginx-1:1.20.1-14.el9_2.1.x86_64  |  Fixed: 1:1.20.1-14.el9_2.3  |  CVSS: 8.2  |  EPSS: 38.1%) Tj ET
+BT /F2 8 Tf 0.80 0.20 0.20 rg 40.0 446.0 Td (Status: AFFECTED \(Confidence: High\)) Tj ET
+BT /F1 8 Tf 0.10 0.10 0.10 rg 40.0 434.0 Td (Applicability: Confirmed vulnerable package installed \(nginx-1:1.20.1-14.el9_2.1.x86_64\) and all prerequisites) Tj ET
+BT /F3 8 Tf 0.60 0.30 0.00 rg 40.0 420.0 Td (Remediation: sudo dnf update nginx) Tj ET
+BT /F3 8 Tf 0.10 0.40 0.20 rg 40.0 408.0 Td (Verification: rpm -q --changelog nginx | grep -i 'CVE-2026-123007' || dnf updateinfo info --cve CVE) Tj ET
+BT /F3 7 Tf 0.20 0.20 0.40 rg 40.0 396.0 Td (Audited Evidence: $ rpm -q nginx-1:1.20.1-14.el9_2.1.x86_64) Tj ET
+BT /F3 7 Tf 0.10 0.50 0.30 rg 48.0 386.0 Td (-> Installed: nginx-1:1.20.1-14.el9_2.1.x86_64 | Vendor Fixed: 1:1.20.1-14.el9_2.3) Tj ET
+0.85 0.85 0.85 RG 1 w 30.0 376.0 m 582.0 376.0 l S
+0.93 0.95 0.98 rg 30.0 358.0 552.0 20.0 re f
+BT /F2 9 Tf 0.10 0.20 0.40 rg 35.0 364.0 Td (#4  CVE-2026-114938 - OpenJDK AVX-512 VBMI Base64 Decoding Out-of-Bounds Memo) Tj ET
+BT /F1 8 Tf 0.30 0.30 0.30 rg 40.0 344.0 Td (Component: java-17-openjdk  |  Inst: java-17-openjdk-1:17.0.8-7.el9.x86_64  |  Fixed: 1:17.0.9-1.el9  |  CVSS: 7.5  |  EPSS: 14.2%) Tj ET
+BT /F2 8 Tf 0.80 0.20 0.20 rg 40.0 330.0 Td (Status: AFFECTED \(Confidence: High\)) Tj ET
+BT /F1 8 Tf 0.10 0.10 0.10 rg 40.0 318.0 Td (Applicability: Confirmed vulnerable package installed \(java-17-openjdk-1:17.0.8-7.el9.x86_64\) and all prerequi) Tj ET
+BT /F3 8 Tf 0.60 0.30 0.00 rg 40.0 304.0 Td (Remediation: sudo dnf update java-17-openjdk) Tj ET
+BT /F3 8 Tf 0.10 0.40 0.20 rg 40.0 292.0 Td (Verification: rpm -q --changelog java-17-openjdk | grep -i 'CVE-2026-114938' || dnf updateinfo info) Tj ET
+BT /F3 7 Tf 0.20 0.20 0.40 rg 40.0 280.0 Td (Audited Evidence: $ rpm -q java-17-openjdk-1:17.0.8-7.el9.x86_64) Tj ET
+BT /F3 7 Tf 0.10 0.50 0.30 rg 48.0 270.0 Td (-> Installed: java-17-openjdk-1:17.0.8-7.el9.x86_64 | Vendor Fixed: 1:17.0.9-1.el9) Tj ET
+0.85 0.85 0.85 RG 1 w 30.0 260.0 m 582.0 260.0 l S
+0.93 0.95 0.98 rg 30.0 242.0 552.0 20.0 re f
+BT /F2 9 Tf 0.10 0.20 0.40 rg 35.0 248.0 Td (#5  CVE-2021-3156 - Sudo Baron Samedit Local Privilege Escalation | CISA KEV ACTIVE EXPLOIT) Tj ET
+BT /F1 8 Tf 0.30 0.30 0.30 rg 40.0 228.0 Td (Component: sudo  |  Inst: sudo-1.9.5p2-14.el9.x86_64  |  Fixed: 1.9.5p2-14.el9  |  CVSS: 7.8  |  EPSS: 94.2%) Tj ET
+BT /F2 8 Tf 0.20 0.20 0.20 rg 40.0 214.0 Td (Status: FIXED \(Confidence: High\)) Tj ET
+BT /F1 8 Tf 0.10 0.10 0.10 rg 40.0 202.0 Td (Applicability: Installed package version \(1.9.5p2-14.el9\) meets or exceeds vendor fixed release \(1.9.5p2-14.el) Tj ET
+BT /F3 7 Tf 0.20 0.20 0.40 rg 40.0 188.0 Td (Audited Evidence: $ rpm -q sudo-1.9.5p2-14.el9.x86_64) Tj ET
+BT /F3 7 Tf 0.10 0.50 0.30 rg 48.0 178.0 Td (-> Installed: sudo-1.9.5p2-14.el9.x86_64 | Vendor Fixed: 1.9.5p2-14.el9) Tj ET
+0.85 0.85 0.85 RG 1 w 30.0 168.0 m 582.0 168.0 l S
+BT /F1 9 Tf 0.5 0.5 0.5 rg 40 25 Td (Page 2 of 2  |  Linux Vulnerability Scanner Assessment Report) Tj ET
+
+endstream
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000127 00000 n 
+0000000197 00000 n 
+0000000272 00000 n 
+0000000340 00000 n 
+0000000486 00000 n 
+0000007076 00000 n 
+0000007222 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+13012
+%%EOF

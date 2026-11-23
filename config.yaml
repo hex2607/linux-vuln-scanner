@@ -1,0 +1,53 @@
+# ==============================================================================
+# ACTIVE CONFIGURATION FOR LINUX VULNERABILITY SCANNER
+# ==============================================================================
+scanner:
+  offline_mode: false
+  depth: "deep"
+  cache_dir: "~/.cache/linux-vuln-scanner"
+  cache_ttl_hours: 24
+  target_cves: null
+
+#branding:
+#  company_name: "Enterprise Cloud Security"
+#  assessor_name: "Security Assessment Team"
+#  classification: "INTERNAL USE ONLY"
+#  company_logo: null
+
+reporting:
+  default_formats: ["html", "pdf", "json", "csv"]
+  output_dir: "./reports"
+  report_name_template: "{host}-{timestamp}"
+  min_severity_display: "LOW"
+
+audit_modules:
+  unmanaged_processes: true
+  sshd_audit: true
+  sysctl_audit: true
+  nginx_audit: true
+  jvm_flags_audit: true
+  cpu_instruction_audit: true
+
+data_sources:
+  enable_rhel_rocky: true
+  enable_ubuntu_debian: true
+  enable_cisa_kev: true
+  enable_first_epss: true
+  enable_nvd: true
+
+remote_ssh:
+  default_user: "ec2-user"
+  default_port: 22
+  timeout_seconds: 30
+  default_key_file: null
+
+fleet:
+  concurrency: 5
+  default_fleet_file: "data/sample_fleet.json"
+  fleet_name: "Enterprise Fleet Vulnerability Assessment"
+
+sanitization:
+  redact_secrets: true
+  redact_private_keys: true
+  redact_passwords: true
+  redact_aws_keys: true

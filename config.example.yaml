@@ -1,0 +1,160 @@
+# ==============================================================================
+# LINUX VULNERABILITY SCANNER & SECURITY ASSESSMENT TOOL - CONFIGURATION
+# ==============================================================================
+# This configuration file defines default runtime behaviors, auditing modules,
+# reporting templates, corporate branding, and data source feeds.
+# CLI command-line arguments override values specified in this file.
+
+# ------------------------------------------------------------------------------
+# 1. Scanner Runtime Engine Settings
+# ------------------------------------------------------------------------------
+scanner:
+  # Run in Offline Mode by default (true/false).
+  # When true, uses local advisory seed databases and cached feeds; skips live external network lookups.
+  offline_mode: true
+
+  # Inventory collection depth tier:
+  # - 'basic': Fast inspection of OS identity, package manager database, and open ports (~2s).
+  # - 'standard': Basic + running systemd services + NGINX directives + JVM flags + CPU flags (~10s).
+  # - 'deep': Standard + unmanaged process crawl (/proc/*/exe) + OpenSSH config + sysctl audit (~20s).
+  depth: "standard"
+
+  # Path to local vulnerability database cache directory
+  cache_dir: "~/.cache/linux-vuln-scanner"
+  
+  # Cache Time-To-Live (TTL) in hours before re-querying vendor sources
+  cache_ttl_hours: 24
+
+  # Optional scoped CVE filtering:
+  # Set to a list of specific CVE IDs to audit exclusively, or null to evaluate all advisories.
+  # Example: ["CVE-2021-3156", "CVE-2023-44487"]
+  target_cves: null
+
+# ------------------------------------------------------------------------------
+# 2. Corporate Branding & Report Classification
+# ------------------------------------------------------------------------------
+branding:
+  # Organization / Company name displayed in report header and PDF metadata
+  company_name: "Enterprise Cloud Security"
+
+  # Lead security assessor or team name
+  assessor_name: "Security Assessment Team"
+
+  # Document confidentiality classification banner
+  # Rendered across HTML top bar, PDF title banner, and PDF footer on every page.
+  # Common values: 'CONFIDENTIAL', 'STRICTLY CONFIDENTIAL', 'INTERNAL USE ONLY', 'RESTRICTED'
+  classification: "CONFIDENTIAL // RESTRICTED ACCESS"
+
+  # Optional path to company logo (PNG/SVG/JPEG)
+  company_logo: null
+
+# ------------------------------------------------------------------------------
+# 3. Report Output & File Naming Settings
+# ------------------------------------------------------------------------------
+reporting:
+  # Default output formats generated for each scan (comma-separated list or YAML array)
+  # Supported formats: 'html', 'pdf', 'json', 'csv'
+  default_formats:
+    - "html"
+    - "pdf"
+    - "json"
+    - "csv"
+
+  # Default directory where assessment reports and artifacts are stored
+  output_dir: "./reports"
+
+  # Base filename naming convention template:
+  # Available placeholders:
+  # - {host}      : Target hostname or alias
+  # - {timestamp} : Assessment execution timestamp (YYYYMMDD-HHMMSS)
+  report_name_template: "{host}-{timestamp}"
+
+  # Minimum severity threshold to highlight on executive summary cards:
+  # Choices: 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'
+  min_severity_display: "LOW"
+
+# ------------------------------------------------------------------------------
+# 4. Deep Auditing & Prerequisite Inspection Modules
+# ------------------------------------------------------------------------------
+audit_modules:
+  # Inspect /proc/[0-9]*/exe to identify unmanaged runtimes outside standard RPM/DPKG directories
+  unmanaged_processes: true
+
+  # Audit OpenSSH daemon configuration (sshd -T) for RootLogin, PasswordAuth, and LoginGraceTime
+  sshd_audit: true
+
+  # Audit Linux kernel security parameters (sysctl -a) such as unprivileged_userns_clone
+  sysctl_audit: true
+
+  # Audit NGINX configuration (nginx -T) for active HTTP/2 and TLS cipher configurations
+  nginx_audit: true
+
+  # Audit active JVM processes for command-line intrinsic and AVX flags
+  jvm_flags_audit: true
+
+  # Inspect /proc/cpuinfo for hardware instruction set extensions (AVX-512, VBMI, AES-NI)
+  cpu_instruction_audit: true
+
+# ------------------------------------------------------------------------------
+# 5. Authoritative Threat & Vendor Intelligence Feeds
+# ------------------------------------------------------------------------------
+data_sources:
+  # Red Hat Enterprise Linux (RHEL 8/9) & Rocky Linux Errata (RHSA/RLSA)
+  enable_rhel_rocky: true
+
+  # Ubuntu Security Notices (USN) & Debian Security Tracker
+  enable_ubuntu_debian: true
+
+  # CISA Known Exploited Vulnerabilities (KEV) Catalog
+  enable_cisa_kev: true
+
+  # FIRST Exploit Prediction Scoring System (EPSS) probability scores
+  enable_first_epss: true
+
+  # National Vulnerability Database (NVD) CVSS v3.1 base metrics
+  enable_nvd: true
+
+# ------------------------------------------------------------------------------
+# 6. Remote SSH Assessment Settings
+# ------------------------------------------------------------------------------
+remote_ssh:
+  # Default SSH username when not specified via --user
+  default_user: "ec2-user"
+
+  # Default SSH port
+  default_port: 22
+
+  # Command execution timeout in seconds
+  timeout_seconds: 30
+
+  # Path to default SSH private key (if not passed via --key-file)
+  default_key_file: null
+
+# ------------------------------------------------------------------------------
+# 7. Multi-Server Fleet Scanning Settings
+# ------------------------------------------------------------------------------
+fleet:
+  # Maximum concurrent server assessment threads
+  concurrency: 5
+
+  # Default inventory file path if not passed via --fleet-file
+  default_fleet_file: "data/sample_fleet.json"
+
+  # Default fleet assessment display name
+  fleet_name: "Enterprise Fleet Vulnerability Assessment"
+
+# ------------------------------------------------------------------------------
+# 8. Secret & Credential Sanitization Guardrails
+# ------------------------------------------------------------------------------
+sanitization:
+  # Automatically redact detected credentials from all audited command output snippets
+  redact_secrets: true
+
+  # Redact RSA, DSA, EC, and OpenSSH private key blocks
+  redact_private_keys: true
+
+  # Redact passwords, bearer tokens, and Authorization headers
+  redact_passwords: true
+
+  # Redact AWS Access Keys (AKIA...) and Secret Keys
+  redact_aws_keys: true

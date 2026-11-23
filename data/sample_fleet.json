@@ -1,0 +1,26 @@
+{
+  "fleet_name": "Production E-Commerce Cluster",
+  "servers": [
+    {
+      "host": "mock-web-01",
+      "alias": "web-prod-01",
+      "is_mock": true,
+      "mock_scenario": "default",
+      "tags": {"env": "production", "tier": "frontend", "az": "us-east-1a"}
+    },
+    {
+      "host": "mock-web-02",
+      "alias": "web-prod-02",
+      "is_mock": true,
+      "mock_scenario": "mitigated",
+      "tags": {"env": "production", "tier": "frontend", "az": "us-east-1b"}
+    },
+    {
+      "host": "mock-web-03",
+      "alias": "web-prod-03",
+      "is_mock": true,
+      "mock_scenario": "patched",
+      "tags": {"env": "production", "tier": "frontend", "az": "us-east-1c"}
+    }
+  ]
+}

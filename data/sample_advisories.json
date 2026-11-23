@@ -1,0 +1,315 @@
+{
+  "metadata": {
+    "source": "Authoritative Vendor Advisories (Rocky Linux, Red Hat, Debian, Ubuntu, CISA KEV, FIRST EPSS)",
+    "version": "2026.11",
+    "updated_at": "2026-11-20T00:00:00Z",
+    "cisa_updated_at": "2026-11-19T18:00:00Z",
+    "epss_updated_at": "2026-11-20T04:00:00Z"
+  },
+  "cisa_kev": [
+    {
+      "cveID": "CVE-2023-44487",
+      "vendorProject": "HTTP/2 Protocol",
+      "product": "HTTP/2 Implementations",
+      "vulnerabilityName": "HTTP/2 Rapid Reset Denial of Service Vulnerability",
+      "dateAdded": "2023-10-10",
+      "shortDescription": "Multiple HTTP/2 implementations are vulnerable to a denial of service attack where an attacker opens and resets streams rapidly.",
+      "requiredAction": "Apply vendor patches or disable HTTP/2.",
+      "dueDate": "2023-10-31"
+    },
+    {
+      "cveID": "CVE-2021-3156",
+      "vendorProject": "Sudo",
+      "product": "Sudo",
+      "vulnerabilityName": "Sudo Baron Samedit Local Privilege Escalation",
+      "dateAdded": "2021-11-03",
+      "shortDescription": "Heap-based buffer overflow in Sudo allows local privilege escalation to root.",
+      "requiredAction": "Apply updates per vendor instructions.",
+      "dueDate": "2021-11-17"
+    },
+    {
+      "cveID": "CVE-2023-4863",
+      "vendorProject": "Google / WebP",
+      "product": "libwebp",
+      "vulnerabilityName": "libwebp Heap Buffer Overflow",
+      "dateAdded": "2023-09-13",
+      "shortDescription": "Heap buffer overflow in libwebp allows remote code execution via a crafted WebP lossless image.",
+      "requiredAction": "Apply vendor updates.",
+      "dueDate": "2023-10-04"
+    }
+  ],
+  "epss_scores": {
+    "CVE-2026-114938": {"epss": "0.1425", "percentile": "0.7812"},
+    "CVE-2026-123633": {"epss": "0.7289", "percentile": "0.9841"},
+    "CVE-2026-123007": {"epss": "0.3812", "percentile": "0.9125"},
+    "CVE-2023-44487": {"epss": "0.8842", "percentile": "0.9954"},
+    "CVE-2021-3156": {"epss": "0.9421", "percentile": "0.9982"},
+    "CVE-2023-38408": {"epss": "0.6210", "percentile": "0.9634"}
+  },
+  "advisories": [
+    {
+      "cve_id": "CVE-2021-3156",
+      "advisory_id": "RHSA-2021:0218",
+      "title": "Sudo Heap-Based Buffer Overflow in Argument Parsing ('Baron Samedit')",
+      "description": "A heap-based buffer overflow flaw was found in Sudo's command-line argument unescaping logic when operating in shell mode (sudoedit -s or sudo -s). When an argument terminates with a single trailing backslash character, the unescaping loop increments the read pointer past the terminating null byte, copying memory out-of-bounds into adjacent heap structures.",
+      "severity": "HIGH",
+      "cvss_score": 7.8,
+      "cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "source_name": "Rocky Linux / Red Hat",
+      "root_cause": "Heap memory corruption in parse_args() via single unescaped trailing backslash in shell mode (-s).",
+      "affected_packages": {
+        "sudo": {
+          "fixed_version": "1.9.5p2-1.el9",
+          "affected_range": "< 1.9.5p2-1.el9"
+        }
+      },
+      "references": [
+        "https://access.redhat.com/security/cve/CVE-2021-3156",
+        "https://access.redhat.com/errata/RHSA-2021:0218",
+        "https://www.sudo.ws/security/advisories/unescape_overflow/",
+        "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+      ],
+      "published_date": "2021-01-26T00:00:00Z",
+      "remediation_text": "Ensure sudo package is updated to the latest vendor errata build via DNF: sudo dnf update sudo",
+      "mitigation_text": "If immediate updating is deferred, restrict access to authorized personnel via VPN and SSH keys; enable systemd auditd rules to monitor execution of /usr/bin/sudo and /usr/bin/sudoedit.",
+      "operational_impact": "None. Sudo is a standalone client executable; updating does not interrupt active user sessions, running daemons, or require a system reboot.",
+      "compensating_controls": [
+        "Perimeter Network Isolation: Host is strictly accessible via private VPN; no SSH port is exposed to the public internet.",
+        "Cryptographic Authentication: Password authentication is disabled; only authorized SSH private keys are accepted.",
+        "Population Control: Server is dedicated to backend services; no untrusted, multi-tenant, or guest local user accounts exist on the machine."
+      ],
+      "residual_risk": "Low. If an external service (such as a web daemon) were compromised via an unauthenticated remote execution vulnerability, an adversary executing under the daemon's local service account could attempt local privilege escalation to root.",
+      "validation_steps": [
+        {
+          "step": "1. Package Version Verification",
+          "command": "rpm -q sudo",
+          "purpose": "Queries RPM database for exact epoch, version, and vendor release.",
+          "expected_output": "sudo-1.9.5p2-10.el9_6.2.x86_64 (Patched: release >= 1.9.5p2-1.el9)"
+        },
+        {
+          "step": "2. Authoritative Backport Changelog Inspection",
+          "command": "rpm -q --changelog sudo | grep -B 2 -A 4 -i 'CVE-2021-3156'",
+          "purpose": "Inspects binary changelog for authoritative vendor security backport commit.",
+          "expected_output": "Resolves: CVE-2021-3156 (heap-based buffer overflow in command line parsing)"
+        },
+        {
+          "step": "3. File Permissions and SUID Bit Verification",
+          "command": "ls -l /usr/bin/sudo /usr/bin/sudoedit",
+          "purpose": "Confirms standard file permissions and verifies binary ownership.",
+          "expected_output": "-rwsr-xr-x. 1 root root ... /usr/bin/sudo"
+        }
+      ],
+      "safe_verification_procedure": "Defensive Verification Procedure: Inspect the package release and vendor security changelog using 'rpm -q --changelog sudo | grep -i CVE-2021-3156' to verify the presence of the vendor patch. Check file permissions on /usr/bin/sudo to ensure standard system ownership.",
+      "prerequisite_rules": [
+        "package_installed:sudo"
+      ]
+    },
+    {
+      "cve_id": "CVE-2023-44487",
+      "advisory_id": "RHSA-2023:5468",
+      "title": "HTTP/2 Rapid Reset Protocol Denial of Service (DDoS)",
+      "description": "The HTTP/2 protocol stream handling engine is vulnerable to a denial of service attack where an attacker continuously opens new streams and immediately resets them using RST_STREAM frames. This forces the server to process connection overhead while avoiding the concurrent stream limit, leading to high CPU exhaustion and denial of service.",
+      "severity": "HIGH",
+      "cvss_score": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "source_name": "Rocky Linux / Red Hat",
+      "root_cause": "Protocol state resource exhaustion: continuous stream creation immediately followed by RST_STREAM cancellation frames.",
+      "affected_packages": {
+        "nginx": {
+          "fixed_version": "1:1.20.1-14.el9_2.3",
+          "affected_range": "< 1:1.20.1-14.el9_2.3"
+        }
+      },
+      "references": [
+        "https://access.redhat.com/security/cve/CVE-2023-44487",
+        "https://access.redhat.com/errata/RHSA-2023:5468",
+        "https://nginx.org/en/security_advisories.html",
+        "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+      ],
+      "published_date": "2023-10-10T00:00:00Z",
+      "remediation_text": "Upgrade NGINX package to vendor fixed release 1:1.20.1-14.el9_2.3 or modern mainline release: sudo dnf update nginx",
+      "mitigation_text": "Disable HTTP/2 support on listening sockets by removing 'http2' parameter from listen directives in /etc/nginx/nginx.conf.",
+      "operational_impact": "Applying patch or configuration requires an NGINX configuration reload ('sudo nginx -s reload') or service restart. No host reboot required.",
+      "compensating_controls": [
+        "Perimeter Rate Limiting: Cloudflare / AWS WAF or upstream reverse proxy enforcing strict RST_STREAM rate limits.",
+        "Protocol Restriction: Running HTTP/1.1 only on public endpoints where HTTP/2 is not strictly required."
+      ],
+      "residual_risk": "None if patched. If unpatched and exposed, public attackers can exhaust worker CPU cycles.",
+      "validation_steps": [
+        {
+          "step": "1. Installed NGINX Version & Epoch Check",
+          "command": "rpm -q --qf '%{NAME}-%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}\\n' nginx",
+          "purpose": "Verifies exact RPM EVR to check whether version exceeds 1:1.20.1-14.el9_2.3.",
+          "expected_output": "nginx-2:1.30.2-1.el9.ngx.x86_64 (Patched: 2:1.30.2 > 1:1.20.1)"
+        },
+        {
+          "step": "2. Service Running State Check",
+          "command": "systemctl is-active nginx",
+          "purpose": "Verifies whether NGINX daemon is active and listening.",
+          "expected_output": "active"
+        },
+        {
+          "step": "3. HTTP/2 Listener Configuration Audit",
+          "command": "nginx -T 2>/dev/null | grep -E 'listen.*http2|http2\\s+on'",
+          "purpose": "Audits active configuration for HTTP/2 protocol activation.",
+          "expected_output": "listen ... ssl http2; OR http2 on;"
+        }
+      ],
+      "safe_verification_procedure": "Safe Non-Destructive Verification: Execute 'curl -k -I --http2 https://localhost' to verify if server negotiates HTTP/2 via ALPN. Run 'nginx -v' to confirm build version.",
+      "prerequisite_rules": [
+        "service_running:nginx",
+        "config_directive_active:nginx:http2:enabled"
+      ]
+    },
+    {
+      "cve_id": "CVE-2026-123633",
+      "advisory_id": "RLSA-2026:1236",
+      "title": "NGINX HTTP/2 Rapid Stream Cancellation High CPU Resource Exhaustion",
+      "description": "A vulnerability in NGINX HTTP/2 protocol parser allows remote attackers to cause severe CPU exhaustion by sending rapid sequences of HEADERS followed by RST_STREAM frames on active HTTP/2 listeners.",
+      "severity": "HIGH",
+      "cvss_score": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "source_name": "Rocky Linux",
+      "root_cause": "Improper rate control over rapid stream allocation and cancellation in HTTP/2 state engine.",
+      "affected_packages": {
+        "nginx": {
+          "fixed_version": "1:1.20.1-14.el9_2.3",
+          "affected_range": "< 1:1.20.1-14.el9_2.3"
+        },
+        "nginx-core": {
+          "fixed_version": "1:1.20.1-14.el9_2.3",
+          "affected_range": "< 1:1.20.1-14.el9_2.3"
+        }
+      },
+      "references": [
+        "https://errata.rockylinux.org/RLSA-2026:1236",
+        "https://access.redhat.com/security/cve/CVE-2026-123633",
+        "https://nginx.org/en/security_advisories.html"
+      ],
+      "published_date": "2026-02-10T00:00:00Z",
+      "remediation_text": "Apply updated Rocky Linux package: sudo dnf update nginx",
+      "mitigation_text": "Disable HTTP/2 on listening ports by removing 'http2' parameter from listen directives in /etc/nginx/nginx.conf.",
+      "operational_impact": "Requires NGINX service reload ('systemctl reload nginx'). Zero system downtime.",
+      "compensating_controls": [
+        "WAF / Edge Rate Limiting: Limit stream resets per TCP connection.",
+        "Protocol Disablement: Operating solely under HTTP/1.1."
+      ],
+      "residual_risk": "None if patched. If vulnerable, server worker threads can be monopolized by repetitive resets.",
+      "validation_steps": [
+        {
+          "step": "1. Package EVR Comparison",
+          "command": "rpm -q nginx",
+          "purpose": "Checks installed package against fixed release 1:1.20.1-14.el9_2.3.",
+          "expected_output": "nginx-2:1.30.2-1.el9.ngx.x86_64"
+        },
+        {
+          "step": "2. Active Service Check",
+          "command": "systemctl status nginx",
+          "purpose": "Verifies if NGINX process is active.",
+          "expected_output": "Active: active (running)"
+        }
+      ],
+      "safe_verification_procedure": "Safe Non-Destructive Verification: Inspect NGINX build flags using 'nginx -V' to check compiled modules and verify installed release.",
+      "prerequisite_rules": [
+        "service_running:nginx",
+        "config_directive_active:nginx:http2:enabled"
+      ]
+    },
+    {
+      "cve_id": "CVE-2026-123007",
+      "advisory_id": "RLSA-2026:1230",
+      "title": "NGINX HTTP/2 HPACK Dynamic Table State Synchronization Deserialization Flaw",
+      "description": "An issue was discovered in NGINX HTTP/2 HPACK header decoder when handling fragmented literal header fields with incremental indexing, which can cause state desynchronization and worker process termination.",
+      "severity": "HIGH",
+      "cvss_score": 8.2,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H",
+      "source_name": "Rocky Linux",
+      "root_cause": "Improper boundary handling in HPACK dynamic header table deserialization during fragmented literal decoding.",
+      "affected_packages": {
+        "nginx": {
+          "fixed_version": "1:1.20.1-14.el9_2.3",
+          "affected_range": "< 1:1.20.1-14.el9_2.3"
+        }
+      },
+      "references": [
+        "https://errata.rockylinux.org/RLSA-2026:1230",
+        "https://access.redhat.com/security/cve/CVE-2026-123007"
+      ],
+      "published_date": "2026-02-04T00:00:00Z",
+      "remediation_text": "Update nginx package to fixed vendor release 1:1.20.1-14.el9_2.3 via dnf.",
+      "mitigation_text": "Disable HTTP/2 protocol support in server configurations.",
+      "operational_impact": "Requires NGINX service reload. No system reboot.",
+      "compensating_controls": [
+        "Disable HTTP/2 on affected listeners."
+      ],
+      "residual_risk": "Worker crash leading to intermittent denial of service if unpatched.",
+      "validation_steps": [
+        {
+          "step": "1. Package Version Check",
+          "command": "rpm -q nginx",
+          "purpose": "Compares EVR to 1:1.20.1-14.el9_2.3.",
+          "expected_output": "nginx-2:1.30.2-1.el9.ngx.x86_64"
+        }
+      ],
+      "safe_verification_procedure": "Safe Non-Destructive Verification: Check 'nginx -v' and test configuration syntax with 'nginx -t'.",
+      "prerequisite_rules": [
+        "service_running:nginx",
+        "config_directive_active:nginx:http2:enabled"
+      ]
+    },
+    {
+      "cve_id": "CVE-2026-114938",
+      "advisory_id": "RLSA-2026:1149",
+      "title": "OpenJDK AVX-512 VBMI Base64 Decoding Out-of-Bounds Memory Corruption",
+      "description": "A flaw was found in OpenJDK HotSpot JVM Base64 decoding intrinsic using AVX-512 VBMI instructions. When decoding specifically crafted Base64 streams on hardware supporting AVX-512 VBMI, memory bounds may be improperly validated leading to JVM crash or arbitrary memory disclosure.",
+      "severity": "HIGH",
+      "cvss_score": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:H",
+      "source_name": "Rocky Linux",
+      "root_cause": "Missing vector bounds validation in AVX-512 VBMI vector intrinsic assembly during Base64 decode.",
+      "affected_packages": {
+        "java-17-openjdk": {
+          "fixed_version": "1:17.0.9-1.el9",
+          "affected_range": "< 1:17.0.9-1.el9"
+        },
+        "java-17-openjdk-headless": {
+          "fixed_version": "1:17.0.9-1.el9",
+          "affected_range": "< 1:17.0.9-1.el9"
+        }
+      },
+      "references": [
+        "https://errata.rockylinux.org/RLSA-2026:1149",
+        "https://access.redhat.com/security/cve/CVE-2026-114938",
+        "https://bugs.openjdk.org/browse/JDK-8321456"
+      ],
+      "published_date": "2026-01-15T00:00:00Z",
+      "remediation_text": "Upgrade java-17-openjdk to version 1:17.0.9-1.el9 or later using dnf.",
+      "mitigation_text": "Disable the vulnerable JVM Base64 intrinsic by passing '-XX:-UseBase64Intrinsics' or disable AVX-512 via '-XX:UseAVX=2' in JAVA_OPTS.",
+      "operational_impact": "Requires restarting affected Java application processes. No host reboot required.",
+      "compensating_controls": [
+        "Hardware constraint: Server CPU lacking AVX-512 VBMI automatically prevents vulnerable vector code execution.",
+        "Runtime flag: Setting -XX:-UseBase64Intrinsics disables the intrinsic."
+      ],
+      "residual_risk": "None if hardware lacks AVX-512 VBMI or Java 17 is not in use.",
+      "validation_steps": [
+        {
+          "step": "1. CPU Hardware Capability Check",
+          "command": "grep -w 'avx512_vbmi' /proc/cpuinfo",
+          "purpose": "Verifies if CPU architecture supports AVX-512 VBMI vector extension.",
+          "expected_output": "Empty (Absent on AMD EPYC-Milan -> Hardware Immune)"
+        },
+        {
+          "step": "2. Installed Java Runtime Check",
+          "command": "java -version",
+          "purpose": "Identifies active Java version branch.",
+          "expected_output": "openjdk version \"11.0.25\" (Branch 11 is unaffected)"
+        }
+      ],
+      "safe_verification_procedure": "Safe Non-Destructive Verification: Inspect CPU flags using 'lscpu | grep -i avx512' and verify active JVM flags in running processes using 'jcmd <PID> VM.flags' or 'ps -eo pid,cmd | grep java'.",
+      "prerequisite_rules": [
+        "cpu_has_flag:avx512_vbmi",
+        "jvm_intrinsic_not_disabled:-XX:-UseBase64Intrinsics"
+      ]
+    }
+  ]
+}
