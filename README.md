@@ -374,6 +374,13 @@ python3 -m unittest discover -s tests -v
 
 ---
 
+## Documentation & Comparative Whitepapers
+
+- 📖 **[Operator Manual](docs/OPERATOR_MANUAL.md)**: End-to-end guide covering installation, CLI commands (`scan-local`, `scan-remote`, `scan-fleet`, `diff`, `fetch-cve`), configuration, and report interpretation.
+- 🔬 **[Comparative Analysis: linux-vuln-scanner vs. Anchore Syft + Grype vs. Aqua Security Trivy](docs/COMPARISON_SYFT_GRYPE_TRIVY.md)**: In-depth technical whitepaper detailing architectural differences, 14-dimension evaluation matrix, false-positive reduction analysis, and 5 empirical scenario breakdowns.
+
+---
+
 ## Security Limitations and Operational Considerations
 
 1. **Read-Only Scope**: The scanner will never apply updates or alter configurations. Remediation commands are provided for human operator review and execution.
